@@ -155,17 +155,25 @@ export const useCreateItem = () => {
 
       if (error.response?.data) {
         const errorData = error.response.data;
-        if (errorData.errors && Array.isArray(errorData.errors)) {
+        // Handle validation errors from backend (details array)
+        if (errorData.details && Array.isArray(errorData.details)) {
+          const errorMessages = errorData.details
+            .map((err) => `${err.field}: ${err.message}`)
+            .join("\n");
+          message = errorMessages;
+        } else if (errorData.errors && Array.isArray(errorData.errors)) {
           const errorMessages = errorData.errors
             .map((err) => err.message || err.msg)
             .join(", ");
-          message = `Validation error: ${errorMessages}`;
+          message = errorMessages;
+        } else if (errorData.error) {
+          message = errorData.error;
         } else if (errorData.message) {
           message = errorData.message;
         }
       }
 
-      toast.error(message, { autoClose: 5000 });
+      toast.error(message, { duration: 5000 });
     },
   });
 };

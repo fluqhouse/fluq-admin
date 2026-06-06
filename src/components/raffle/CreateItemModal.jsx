@@ -179,6 +179,12 @@ export const CreateItemModal = ({
   const handleSubmit = () => {
     if (!validateForm()) return;
 
+    // Convert datetime-local values to ISO 8601 with timezone
+    const toISOString = (dateTimeLocal) => {
+      if (!dateTimeLocal) return "";
+      return new Date(dateTimeLocal).toISOString();
+    };
+
     const submitData = new FormData();
     submitData.append("categoryId", formData.categoryId);
     submitData.append("title", formData.title);
@@ -187,8 +193,8 @@ export const CreateItemModal = ({
       "ticketPrice",
       formData.ticketPrice ? formData.ticketPrice : 0,
     );
-    submitData.append("startTime", formData.startTime);
-    submitData.append("endTime", formData.endTime);
+    submitData.append("startTime", toISOString(formData.startTime));
+    submitData.append("endTime", toISOString(formData.endTime));
     submitData.append("ticketsPerIcon", formData.ticketsPerIcon);
     submitData.append("expectedWinners", formData.expectedWinners);
     submitData.append("frontImage", files.frontImage);
