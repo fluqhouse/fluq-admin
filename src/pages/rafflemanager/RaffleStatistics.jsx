@@ -5,7 +5,7 @@ import {
   useGlobalStatistics,
   useCategories,
 } from "../../hooks/queries/useRaffleQueries";
-import { formatCurrency } from "../../utils/format";
+import { formatCurrency, formatNumber } from "../../utils/format";
 import { StatusBreakdownChart } from "../../components/raffle/charts/StatusBreakdownChart";
 import { CategoryBreakdownChart } from "../../components/raffle/charts/CategoryBreakdownChart";
 
@@ -219,22 +219,19 @@ const RaffleStatistics = () => {
                 <div className="bg-slate-700/30 rounded-lg p-4">
                   <p className="text-xs text-slate-400 mb-1">Total Tickets</p>
                   <p className="text-2xl font-bold text-white">
-                    {stats?.ticketStatistics?.totalTickets?.toLocaleString() ||
-                      0}
+                    {formatNumber(stats?.ticketStatistics?.totalTickets || 0)}
                   </p>
                 </div>
                 <div className="bg-green-600/10 border border-green-600/30 rounded-lg p-4">
                   <p className="text-xs text-green-300 mb-1">Booked</p>
                   <p className="text-2xl font-bold text-green-400">
-                    {stats?.ticketStatistics?.bookedTickets?.toLocaleString() ||
-                      0}
+                    {formatNumber(stats?.ticketStatistics?.bookedTickets || 0)}
                   </p>
                 </div>
                 <div className="bg-blue-600/10 border border-blue-600/30 rounded-lg p-4">
                   <p className="text-xs text-blue-300 mb-1">Available</p>
                   <p className="text-2xl font-bold text-blue-400">
-                    {stats?.ticketStatistics?.availableTickets?.toLocaleString() ||
-                      0}
+                    {formatNumber(stats?.ticketStatistics?.availableTickets || 0)}
                   </p>
                 </div>
                 <div className="bg-purple-600/10 border border-purple-600/30 rounded-lg p-4">

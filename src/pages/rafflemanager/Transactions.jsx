@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Layout from "../../components/dashboard/layouts/Layout";
 import { useRaffleTransactions } from "../../hooks/queries/useRaffleQueries";
+import { formatCurrency, formatNumber } from "../../utils/format";
 
 const statusStyles = {
   Completed: "bg-green-600/20 text-green-400",
@@ -58,7 +59,7 @@ const Transactions = () => {
                 <div>
                   <p className="text-blue-300 text-sm">Today's Sales</p>
                   <p className="text-white text-2xl font-bold">
-                    ₦{summary.todaySales.toLocaleString()}
+                    {formatCurrency(summary.todaySales)}
                   </p>
                 </div>
                 <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
@@ -84,7 +85,7 @@ const Transactions = () => {
                 <div>
                   <p className="text-green-300 text-sm">Tickets Sold</p>
                   <p className="text-white text-2xl font-bold">
-                    {summary.ticketsSold.toLocaleString()}
+                    {formatNumber(summary.ticketsSold)}
                   </p>
                 </div>
                 <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
@@ -110,7 +111,7 @@ const Transactions = () => {
                 <div>
                   <p className="text-yellow-300 text-sm">Pending Payouts</p>
                   <p className="text-white text-2xl font-bold">
-                    ₦{summary.pendingPayouts.toLocaleString()}
+                    {formatCurrency(summary.pendingPayouts)}
                   </p>
                 </div>
                 <div className="w-10 h-10 bg-yellow-600 rounded-lg flex items-center justify-center">
@@ -136,7 +137,7 @@ const Transactions = () => {
                 <div>
                   <p className="text-purple-300 text-sm">Commission</p>
                   <p className="text-white text-2xl font-bold">
-                    ₦{summary.commission.toLocaleString()}
+                    {formatCurrency(summary.commission)}
                   </p>
                 </div>
                 <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center">

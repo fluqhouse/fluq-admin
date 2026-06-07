@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Layout from "../../components/dashboard/layouts/Layout";
 import { useRevenueAnalytics } from "../../hooks/queries/useMarketingQueries";
+import { formatCurrency, formatCurrencyCompact, formatNumber } from "../../utils/format";
 import { DollarSign, RefreshCw, AlertCircle, Calendar, TrendingUp, CreditCard } from "lucide-react";
 import {
   LineChart,
@@ -52,8 +53,8 @@ const CustomTooltip = ({ active, payload, label }) => {
           <p key={index} style={{ color: entry.color }} className="text-sm font-medium">
             {entry.name}: {typeof entry.value === 'number'
               ? entry.name.toLowerCase().includes('revenue')
-                ? `₦${entry.value.toLocaleString()}`
-                : entry.value.toLocaleString()
+                ? formatCurrency(entry.value)
+                : formatNumber(entry.value)
               : entry.value}
           </p>
         ))}
@@ -70,18 +71,6 @@ const RevenueAnalytics = () => {
 
   const data = responseData?.data;
   const error = queryError ? (queryError.error?.message || queryError.message || "Failed to fetch data") : null;
-
-  const formatCurrency = (num) => {
-    if (num === undefined || num === null) return "₦0";
-    if (num >= 1000000) return "₦" + (num / 1000000).toFixed(1) + "M";
-    if (num >= 1000) return "₦" + (num / 1000).toFixed(1) + "K";
-    return "₦" + num.toLocaleString();
-  };
-
-  const formatNumber = (num) => {
-    if (num === undefined || num === null) return "0";
-    return num.toLocaleString();
-  };
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "";
@@ -144,7 +133,7 @@ const RevenueAnalytics = () => {
             {loading ? (
               <div className="h-8 bg-slate-700/50 rounded animate-pulse" />
             ) : (
-              <p className="text-2xl font-bold text-green-400">{formatCurrency(metrics.summary?.totalRevenue)}</p>
+              <p className="text-2xl font-bold text-green-400">{formatCurrencyCompact(metrics.summary?.totalRevenue)}</p>
             )}
           </div>
           <div className="bg-slate-800/50 rounded-xl border border-slate-700/50 p-6">
@@ -170,7 +159,7 @@ const RevenueAnalytics = () => {
             {loading ? (
               <div className="h-8 bg-slate-700/50 rounded animate-pulse" />
             ) : (
-              <p className="text-2xl font-bold text-yellow-400">{formatCurrency(metrics.summary?.avgTransactionValue)}</p>
+              <p className="text-2xl font-bold text-yellow-400">{formatCurrencyCompact(metrics.summary?.avgTransactionValue)}</p>
             )}
           </div>
           <div className="bg-slate-800/50 rounded-xl border border-slate-700/50 p-6">
@@ -184,7 +173,7 @@ const RevenueAnalytics = () => {
               <div className="h-8 bg-slate-700/50 rounded animate-pulse" />
             ) : (
               <p className="text-2xl font-bold text-purple-400">
-                {formatCurrency((charts.dailyRevenue?.reduce((sum, d) => sum + (d.revenue || 0), 0) || 0) / (charts.dailyRevenue?.length || 1))}
+                {formatCurrencyCompact((charts.dailyRevenue?.reduce((sum, d) => sum + (d.revenue || 0), 0) || 0) / (charts.dailyRevenue?.length || 1))}
               </p>
             )}
           </div>
@@ -202,7 +191,7 @@ const RevenueAnalytics = () => {
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
               <XAxis dataKey="date" tickFormatter={formatDate} stroke="#94A3B8" fontSize={12} />
-              <YAxis yAxisId="left" stroke="#10B981" fontSize={12} tickFormatter={(v) => formatCurrency(v)} />
+              <YAxis yAxisId="left" stroke="#10B981" fontSize={12} tickFormatter={formatCurrencyCompact} />
               <YAxis yAxisId="right" orientation="right" stroke="#3B82F6" fontSize={12} />
               <Tooltip content={<CustomTooltip />} />
               <Legend />
@@ -242,14 +231,14 @@ const RevenueAnalytics = () => {
                   outerRadius={110}
                   paddingAngle={5}
                   dataKey="value"
-                  label={({ name, value }) => `${name}: ₦${formatNumber(value)}`}
+                  label={({ name, value }) => `${name}: ${formatCurrency(value)}`}
                   labelLine={{ stroke: "#94A3B8" }}
                 >
                   {(charts.revenueByType || []).map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value) => `₦${formatNumber(value)}`} />
+                <Tooltip formatter={(value) => formatCurrency(value)} />
                 <Legend />
               </PieChart>
             </ResponsiveContainer>
@@ -297,7 +286,7 @@ const RevenueAnalytics = () => {
                   <div>
                     <p className="text-blue-300 text-sm mb-2">Lotto Revenue</p>
                     <p className="text-3xl font-bold text-white">
-                      {formatCurrency(metrics.lottoSales?.reduce((sum, l) => sum + parseFloat(l.totalSales || 0), 0))}
+                      {formatCurrencyCompact(metrics.lottoSales?.reduce((sum, l) => sum + parseFloat(l.totalSales || 0), 0))}
                     </p>
                   </div>
                   <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center">
@@ -313,7 +302,7 @@ const RevenueAnalytics = () => {
                   <div>
                     <p className="text-purple-300 text-sm mb-2">Raffle Revenue</p>
                     <p className="text-3xl font-bold text-white">
-                      {formatCurrency(charts.revenueComparison?.find(r => r.name === 'Raffle')?.value || 0)}
+                      {formatCurrencyCompact(charts.revenueComparison?.find(r => r.name === 'Raffle')?.value || 0)}
                     </p>
                   </div>
                   <div className="w-16 h-16 bg-purple-500/20 rounded-full flex items-center justify-center">

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Layout from "../../components/dashboard/layouts/Layout";
 import { useAllWalletTransactions } from "../../hooks/queries/useWalletQueries";
+import { formatCurrency, formatDate } from "../../utils/format";
 import {
   Search,
   Filter,
@@ -20,7 +21,6 @@ const WalletTransactions = () => {
     data: transactionsData,
     isLoading: loading,
     error: queryError,
-    refetch: fetchTransactions,
   } = useAllWalletTransactions({
     page,
     limit: 15,
@@ -209,18 +209,12 @@ const WalletTransactions = () => {
                       </td>
                       <td className="px-6 py-4 font-medium text-white">
                         <div className="flex items-center gap-1">
-                          {getTypeIcon(tx.type)}₦
-                          {parseFloat(tx.amount).toLocaleString(undefined, {
-                            minimumFractionDigits: 2,
-                          })}
+                          {getTypeIcon(tx.type)}
+                          {formatCurrency(parseFloat(tx.amount), { decimals: 2 })}
                         </div>
                       </td>
                       <td className="px-6 py-4 font-mono text-slate-300">
-                        ₦
-                        {parseFloat(tx.balance_after || 0).toLocaleString(
-                          undefined,
-                          { minimumFractionDigits: 2 },
-                        )}
+                        {formatCurrency(parseFloat(tx.balance_after || 0), { decimals: 2 })}
                       </td>
                       <td className="px-6 py-4">
                         <span
@@ -230,7 +224,7 @@ const WalletTransactions = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-slate-400 text-xs">
-                        {new Date(tx.createdAt).toLocaleString()}
+                        {formatDate(tx.createdAt)}
                       </td>
                     </tr>
                   ))

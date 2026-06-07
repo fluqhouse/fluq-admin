@@ -58,7 +58,7 @@ const RaffleOverview = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-orange-300 text-sm">Total Prize Value</p>
-                  <p className="text-white text-2xl font-bold">$38K</p>
+                  <p className="text-white text-2xl font-bold">₦38K</p>
                 </div>
                 <div className="w-10 h-10 bg-orange-600 rounded-lg flex items-center justify-center">
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -79,7 +79,7 @@ const RaffleOverview = () => {
                 </div>
                 <div className="text-right">
                   <p className="text-green-400 font-semibold">245 entries</p>
-                  <p className="text-slate-400 text-sm">$2,450 value</p>
+                  <p className="text-slate-400 text-sm">₦2,450 value</p>
                 </div>
               </div>
               <div className="flex items-center justify-between py-2 border-b border-slate-600">
@@ -89,17 +89,17 @@ const RaffleOverview = () => {
                 </div>
                 <div className="text-right">
                   <p className="text-blue-400 font-semibold">412 entries</p>
-                  <p className="text-slate-400 text-sm">$5,000 value</p>
+                  <p className="text-slate-400 text-sm">₦5,000 value</p>
                 </div>
               </div>
               <div className="flex items-center justify-between py-2">
                 <div>
                   <p className="text-white font-medium">Monthly Cash Prize</p>
-                  <p className="text-slate-400 text-sm">$10,000 cash • Ends in 2 weeks</p>
+                  <p className="text-slate-400 text-sm">₦10,000 cash • Ends in 2 weeks</p>
                 </div>
                 <div className="text-right">
                   <p className="text-purple-400 font-semibold">1,089 entries</p>
-                  <p className="text-slate-400 text-sm">$10,000 value</p>
+                  <p className="text-slate-400 text-sm">₦10,000 value</p>
                 </div>
               </div>
             </div>

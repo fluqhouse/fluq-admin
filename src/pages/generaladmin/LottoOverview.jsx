@@ -30,7 +30,7 @@ const LottoOverview = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-green-300 text-sm">Today's Revenue</p>
-                  <p className="text-white text-2xl font-bold">$2.1K</p>
+                  <p className="text-white text-2xl font-bold">₦2.1K</p>
                 </div>
                 <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,21 +77,21 @@ const LottoOverview = () => {
                   <p className="text-white font-medium">Daily Lotto Draw #1247</p>
                   <p className="text-slate-400 text-sm">Completed 2 hours ago</p>
                 </div>
-                <span className="text-green-400 font-semibold">$850</span>
+                <span className="text-green-400 font-semibold">₦850</span>
               </div>
               <div className="flex items-center justify-between py-2 border-b border-slate-600">
                 <div>
                   <p className="text-white font-medium">Weekly Jackpot #89</p>
                   <p className="text-slate-400 text-sm">In progress</p>
                 </div>
-                <span className="text-blue-400 font-semibold">$15.2K</span>
+                <span className="text-blue-400 font-semibold">₦15.2K</span>
               </div>
               <div className="flex items-center justify-between py-2">
                 <div>
                   <p className="text-white font-medium">Power Ball #456</p>
                   <p className="text-slate-400 text-sm">Scheduled for tonight</p>
                 </div>
-                <span className="text-yellow-400 font-semibold">$45K</span>
+                <span className="text-yellow-400 font-semibold">₦45K</span>
               </div>
             </div>
           </div>

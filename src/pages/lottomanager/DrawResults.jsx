@@ -5,6 +5,7 @@ import {
   useDrawResults,
   useTicketResults,
 } from "../../hooks/queries/useLottoQueries";
+import { formatCurrency, formatDate } from "../../utils/format";
 
 const DrawResults = () => {
   const { gameId } = useParams();
@@ -90,18 +91,6 @@ const DrawResults = () => {
   const clearTicketSearch = () => {
     setTicketId("");
     setSearchTicketId(null);
-  };
-
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleString();
-  };
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat("en-NG", {
-      style: "currency",
-      currency: "NGN",
-      minimumFractionDigits: 0,
-    }).format(amount);
   };
 
   const renderNumberBall = (number, isMatched = false) => {

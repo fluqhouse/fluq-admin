@@ -16,7 +16,7 @@ const GeneralAdminDashboard = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-blue-300 text-sm">Lotto Revenue</p>
-                  <p className="text-white text-2xl font-bold">$45K</p>
+                  <p className="text-white text-2xl font-bold">₦45K</p>
                 </div>
                 <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
                   <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -30,7 +30,7 @@ const GeneralAdminDashboard = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-purple-300 text-sm">Raffle Revenue</p>
-                  <p className="text-white text-2xl font-bold">$38K</p>
+                  <p className="text-white text-2xl font-bold">₦38K</p>
                 </div>
                 <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
                   <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -66,7 +66,7 @@ const GeneralAdminDashboard = () => {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-300">Today's Sales</span>
-                <span className="text-green-400 font-semibold">$2.1K</span>
+                <span className="text-green-400 font-semibold">₦2.1K</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-300">Pending Draws</span>

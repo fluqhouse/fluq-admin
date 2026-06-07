@@ -4,6 +4,7 @@ import {
   useRaffleReportsOverview,
   useGenerateRaffleReport,
 } from "../../hooks/queries/useRaffleQueries";
+import { formatCurrency, formatNumber } from "../../utils/format";
 
 const Reports = () => {
   const [dateFilter, setDateFilter] = useState("all");
@@ -70,8 +71,8 @@ const Reports = () => {
                   Revenue Report
                 </h3>
                 <p className="text-blue-300 text-sm mb-4">
-                  Ticket sales and revenue analysis. Total Revenue: ₦
-                  {summary.totalRevenue.toLocaleString()}
+                  Ticket sales and revenue analysis. Total Revenue:{" "}
+                  {formatCurrency(summary.totalRevenue)}
                 </p>
                 <button
                   onClick={() => handleGenerate("revenue")}
@@ -112,7 +113,7 @@ const Reports = () => {
                 </h3>
                 <p className="text-green-300 text-sm mb-4">
                   Participant demographics and engagement. Total Tickets:{" "}
-                  {summary.totalTickets.toLocaleString()}
+                  {formatNumber(summary.totalTickets)}
                 </p>
                 <button
                   onClick={() => handleGenerate("participant")}
@@ -185,13 +186,13 @@ const Reports = () => {
               <div className="bg-slate-600/50 rounded-lg p-3 text-center">
                 <p className="text-slate-300 text-sm">Tickets Sold</p>
                 <p className="text-white text-xl font-bold">
-                  {summary.totalTickets.toLocaleString()}
+                  {formatNumber(summary.totalTickets)}
                 </p>
               </div>
               <div className="bg-slate-600/50 rounded-lg p-3 text-center">
                 <p className="text-slate-300 text-sm">Total Revenue</p>
                 <p className="text-white text-xl font-bold">
-                  ₦{summary.totalRevenue.toLocaleString()}
+                  {formatCurrency(summary.totalRevenue)}
                 </p>
               </div>
               <div className="bg-slate-600/50 rounded-lg p-3 text-center">

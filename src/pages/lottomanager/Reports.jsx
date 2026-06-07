@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import Layout from "../../components/dashboard/layouts/Layout";
 import {
   useLottoReportsOverview,
   useGenerateLottoReport,
 } from "../../hooks/queries/useLottoQueries";
+import { formatCurrency, formatNumber } from "../../utils/format";
 
 const Reports = () => {
-  const { data: response, isLoading } = useLottoReportsOverview();
+  const { data: response } = useLottoReportsOverview();
   const summary = response?.data?.summary || {
     totalGames: 0,
     totalTickets: 0,
@@ -55,8 +56,8 @@ const Reports = () => {
                 </div>
                 <h3 className="text-white font-semibold mb-2">Sales Report</h3>
                 <p className="text-blue-300 text-sm mb-4">
-                  Daily, weekly, and monthly sales analysis. Total Revenue: $
-                  {summary.totalRevenue.toLocaleString()}
+                  Daily, weekly, and monthly sales analysis. Total Revenue:{" "}
+                  {formatCurrency(summary.totalRevenue)}
                 </p>
                 <button
                   onClick={() => handleGenerate("sales")}
@@ -94,7 +95,7 @@ const Reports = () => {
                 <h3 className="text-white font-semibold mb-2">Player Report</h3>
                 <p className="text-green-300 text-sm mb-4">
                   Player activity and engagement metrics. Total Tickets:{" "}
-                  {summary.totalTickets.toLocaleString()}
+                  {formatNumber(summary.totalTickets)}
                 </p>
                 <button
                   onClick={() => handleGenerate("player")}
@@ -132,7 +133,7 @@ const Reports = () => {
                 <h3 className="text-white font-semibold mb-2">Game Report</h3>
                 <p className="text-yellow-300 text-sm mb-4">
                   Individual game performance and statistics. Total Games:{" "}
-                  {summary.totalGames.toLocaleString()}
+                  {formatNumber(summary.totalGames)}
                 </p>
                 <button
                   onClick={() => handleGenerate("game")}

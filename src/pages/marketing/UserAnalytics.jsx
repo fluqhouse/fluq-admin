@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Layout from "../../components/dashboard/layouts/Layout";
 import { useUserAcquisitionMetrics } from "../../hooks/queries/useMarketingQueries";
+import { formatCurrency, formatNumber } from "../../utils/format";
 import { Users, RefreshCw, AlertCircle, Calendar, TrendingUp, UserCheck, UserX } from "lucide-react";
 import {
   LineChart,
@@ -58,6 +59,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
+// eslint-disable-next-line no-unused-vars
 const StatCard = ({ title, value, icon: Icon, color, subtext }) => (
   <div className="p-4 bg-slate-700/30 rounded-lg">
     <div className="flex items-center gap-2 mb-2">
@@ -76,11 +78,6 @@ const UserAnalytics = () => {
 
   const data = responseData?.data;
   const error = queryError ? (queryError.error?.message || queryError.message || "Failed to fetch data") : null;
-
-  const formatNumber = (num) => {
-    if (num === undefined || num === null) return "0";
-    return num.toLocaleString();
-  };
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "";
@@ -334,25 +331,25 @@ const UserAnalytics = () => {
                 <div className="p-4 bg-slate-700/30 rounded-lg text-center">
                   <p className="text-slate-400 text-sm mb-2">Average LTV</p>
                   <p className="text-3xl font-bold text-yellow-400">
-                    ₦{formatNumber(parseFloat(metrics.lifetimeValue?.avg_ltv || 0).toFixed(0))}
+                    {formatCurrency(parseFloat(metrics.lifetimeValue?.avg_ltv || 0))}
                   </p>
                 </div>
                 <div className="p-4 bg-slate-700/30 rounded-lg text-center">
                   <p className="text-slate-400 text-sm mb-2">Max LTV</p>
                   <p className="text-3xl font-bold text-green-400">
-                    ₦{formatNumber(parseFloat(metrics.lifetimeValue?.max_ltv || 0).toFixed(0))}
+                    {formatCurrency(parseFloat(metrics.lifetimeValue?.max_ltv || 0))}
                   </p>
                 </div>
                 <div className="p-4 bg-slate-700/30 rounded-lg text-center">
                   <p className="text-slate-400 text-sm mb-2">Min LTV</p>
                   <p className="text-3xl font-bold text-slate-400">
-                    ₦{formatNumber(parseFloat(metrics.lifetimeValue?.min_ltv || 0).toFixed(0))}
+                    {formatCurrency(parseFloat(metrics.lifetimeValue?.min_ltv || 0))}
                   </p>
                 </div>
                 <div className="p-4 bg-slate-700/30 rounded-lg text-center">
                   <p className="text-slate-400 text-sm mb-2">LTV Range</p>
                   <p className="text-3xl font-bold text-purple-400">
-                    ₦{formatNumber((parseFloat(metrics.lifetimeValue?.max_ltv || 0) - parseFloat(metrics.lifetimeValue?.min_ltv || 0)).toFixed(0))}
+                    {formatCurrency(parseFloat(metrics.lifetimeValue?.max_ltv || 0) - parseFloat(metrics.lifetimeValue?.min_ltv || 0))}
                   </p>
                 </div>
               </div>

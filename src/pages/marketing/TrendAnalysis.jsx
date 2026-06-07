@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Layout from "../../components/dashboard/layouts/Layout";
 import { useTrendAnalysis } from "../../hooks/queries/useMarketingQueries";
+import { formatCurrency, formatCurrencyCompact, formatNumber } from "../../utils/format";
 import { TrendingUp, RefreshCw, AlertCircle, Calendar, Users, DollarSign, Target, Zap } from "lucide-react";
 import {
   LineChart,
@@ -48,8 +49,8 @@ const CustomTooltip = ({ active, payload, label }) => {
           let displayValue = value;
           if (typeof value === 'number' && !isNaN(value)) {
             displayValue = entry.name?.toLowerCase().includes('revenue')
-              ? `₦${value.toLocaleString()}`
-              : value.toLocaleString();
+              ? formatCurrency(value)
+              : formatNumber(value);
           }
           return (
             <p key={index} style={{ color: entry.color || '#fff' }} className="text-sm font-medium">
@@ -96,18 +97,6 @@ const TrendAnalysis = () => {
 
   const data = responseData?.data;
   const error = queryError ? (queryError.error?.message || queryError.message || "Failed to fetch data") : null;
-
-  const formatNumber = (num) => {
-    if (num === undefined || num === null) return "0";
-    return num.toLocaleString();
-  };
-
-  const formatCurrency = (num) => {
-    if (num === undefined || num === null) return "₦0";
-    if (num >= 1000000) return "₦" + (num / 1000000).toFixed(1) + "M";
-    if (num >= 1000) return "₦" + (num / 1000).toFixed(1) + "K";
-    return "₦" + num.toLocaleString();
-  };
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "";
@@ -228,7 +217,7 @@ const TrendAnalysis = () => {
             />
             <PredictiveCard
               title="Projected Revenue (30d)"
-              value={formatCurrency(predictive.projectedRevenue30Days)}
+              value={formatCurrencyCompact(predictive.projectedRevenue30Days)}
               icon={DollarSign}
               color="bg-yellow-500"
               loading={loading}
@@ -276,7 +265,7 @@ const TrendAnalysis = () => {
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
               <XAxis dataKey="date" tickFormatter={formatDate} stroke="#94A3B8" fontSize={12} />
-              <YAxis stroke="#94A3B8" fontSize={12} tickFormatter={(v) => formatCurrency(v)} />
+              <YAxis stroke="#94A3B8" fontSize={12} tickFormatter={(v) => formatCurrencyCompact(v)} />
               <Tooltip content={<CustomTooltip />} />
               <Legend />
               <Area
@@ -307,7 +296,7 @@ const TrendAnalysis = () => {
                 <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
                 <XAxis dataKey="date" tickFormatter={formatDate} stroke="#94A3B8" fontSize={12} />
                 <YAxis yAxisId="left" stroke="#3B82F6" fontSize={12} />
-                <YAxis yAxisId="right" orientation="right" stroke="#8B5CF6" fontSize={12} tickFormatter={(v) => formatCurrency(v)} />
+                <YAxis yAxisId="right" orientation="right" stroke="#8B5CF6" fontSize={12} tickFormatter={(v) => formatCurrencyCompact(v)} />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend />
                 <Bar yAxisId="left" dataKey="tickets" name="Tickets Sold" fill="#3B82F6" radius={[4, 4, 0, 0]} />
@@ -337,7 +326,7 @@ const TrendAnalysis = () => {
                 <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
                 <XAxis dataKey="date" tickFormatter={formatDate} stroke="#94A3B8" fontSize={12} />
                 <YAxis yAxisId="left" stroke="#10B981" fontSize={12} />
-                <YAxis yAxisId="right" orientation="right" stroke="#EC4899" fontSize={12} tickFormatter={(v) => formatCurrency(v)} />
+                <YAxis yAxisId="right" orientation="right" stroke="#EC4899" fontSize={12} tickFormatter={(v) => formatCurrencyCompact(v)} />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend />
                 <Bar yAxisId="left" dataKey="tickets" name="Tickets Booked" fill="#10B981" radius={[4, 4, 0, 0]} />
@@ -380,7 +369,7 @@ const TrendAnalysis = () => {
                 <BarChart data={monthlyRevenueData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
                   <XAxis dataKey="month" stroke="#94A3B8" fontSize={12} />
-                  <YAxis stroke="#94A3B8" fontSize={12} tickFormatter={(v) => formatCurrency(v)} />
+                  <YAxis stroke="#94A3B8" fontSize={12} tickFormatter={(v) => formatCurrencyCompact(v)} />
                   <Tooltip content={<CustomTooltip />} />
                   <Legend />
                   <Bar dataKey="revenue" name="Revenue" fill="#10B981" radius={[4, 4, 0, 0]} />
@@ -406,7 +395,7 @@ const TrendAnalysis = () => {
                   fontSize={12}
                 />
                 <YAxis yAxisId="left" stroke="#3B82F6" fontSize={12} />
-                <YAxis yAxisId="right" orientation="right" stroke="#10B981" fontSize={12} tickFormatter={(v) => formatCurrency(v)} />
+                <YAxis yAxisId="right" orientation="right" stroke="#10B981" fontSize={12} tickFormatter={(v) => formatCurrencyCompact(v)} />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend />
                 <Line

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Layout from "../../components/dashboard/layouts/Layout";
 import { useLottoAnalytics } from "../../hooks/queries/useLottoQueries";
+import { formatCurrency, formatNumber } from "../../utils/format";
 
 const Analytics = () => {
   const [period, setPeriod] = useState("30d");
@@ -49,11 +50,7 @@ const Analytics = () => {
                 <div>
                   <p className="text-blue-300 text-sm">Total Sales</p>
                   <p className="text-white text-2xl font-bold">
-                    $
-                    {analytics.totalSales.toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
+                    {formatCurrency(analytics.totalSales)}
                   </p>
                 </div>
                 <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
@@ -79,7 +76,7 @@ const Analytics = () => {
                 <div>
                   <p className="text-green-300 text-sm">Total Players</p>
                   <p className="text-white text-2xl font-bold">
-                    {analytics.totalPlayers.toLocaleString()}
+                    {formatNumber(analytics.totalPlayers)}
                   </p>
                 </div>
                 <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
@@ -131,11 +128,7 @@ const Analytics = () => {
                 <div>
                   <p className="text-purple-300 text-sm">Avg. Bet</p>
                   <p className="text-white text-2xl font-bold">
-                    $
-                    {analytics.avgBet.toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
+                    {formatCurrency(analytics.avgBet)}
                   </p>
                 </div>
                 <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center">
@@ -187,10 +180,7 @@ const Analytics = () => {
                         </p>
                       </div>
                       <div className="text-green-400 font-semibold">
-                        $
-                        {game.revenue.toLocaleString(undefined, {
-                          minimumFractionDigits: 2,
-                        })}
+                        {formatCurrency(game.revenue)}
                       </div>
                     </div>
                   ))

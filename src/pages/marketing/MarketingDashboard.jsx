@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Layout from "../../components/dashboard/layouts/Layout";
+import { formatCurrencyCompact, formatNumberCompact } from "../../utils/format";
 import {
   useExecutiveDashboard,
   useUserAcquisitionMetrics,
@@ -43,6 +44,7 @@ const PERIOD_OPTIONS = [
 
 const COLORS = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#EC4899"];
 
+// eslint-disable-next-line no-unused-vars
 const StatCard = ({ title, value, change, icon: Icon, color, loading }) => {
   const isPositive = change >= 0;
   return (
@@ -123,18 +125,6 @@ const MarketingDashboard = () => {
 
 
 
-  const formatNumber = (num) => {
-    if (num === undefined || num === null) return "0";
-    if (num >= 1000000) return (num / 1000000).toFixed(1) + "M";
-    if (num >= 1000) return (num / 1000).toFixed(1) + "K";
-    return num.toLocaleString();
-  };
-
-  const formatCurrency = (num) => {
-    if (num === undefined || num === null) return "₦0";
-    return "₦" + formatNumber(num);
-  };
-
   const formatDate = (dateStr) => {
     if (!dateStr) return "";
     const date = new Date(dateStr);
@@ -191,7 +181,7 @@ const MarketingDashboard = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard
             title="Total Users"
-            value={formatNumber(kpi.totalUsers)}
+            value={formatNumberCompact(kpi.totalUsers)}
             change={kpi.userGrowthRate}
             icon={Users}
             color="bg-blue-500"
@@ -199,21 +189,21 @@ const MarketingDashboard = () => {
           />
           <StatCard
             title="New Users"
-            value={formatNumber(kpi.newUsers)}
+            value={formatNumberCompact(kpi.newUsers)}
             icon={Users}
             color="bg-green-500"
             loading={loading}
           />
           <StatCard
             title="Active Users"
-            value={formatNumber(kpi.activeUsers)}
+            value={formatNumberCompact(kpi.activeUsers)}
             icon={Activity}
             color="bg-purple-500"
             loading={loading}
           />
           <StatCard
             title="Total Revenue"
-            value={formatCurrency(kpi.totalRevenue)}
+            value={formatCurrencyCompact(kpi.totalRevenue)}
             icon={DollarSign}
             color="bg-yellow-500"
             loading={loading}
@@ -260,7 +250,7 @@ const MarketingDashboard = () => {
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
                 <XAxis dataKey="date" tickFormatter={formatDate} stroke="#94A3B8" fontSize={12} />
-                <YAxis stroke="#94A3B8" fontSize={12} tickFormatter={(v) => `₦${formatNumber(v)}`} />
+                <YAxis stroke="#94A3B8" fontSize={12} tickFormatter={formatCurrencyCompact} />
                 <Tooltip content={<CustomTooltip />} />
                 <Area
                   type="monotone"
@@ -379,7 +369,7 @@ const MarketingDashboard = () => {
             ) : (
               <div className="flex items-center gap-4">
                 <div className="text-4xl font-bold text-white">
-                  {formatCurrency(performance.avgLTV)}
+                  {formatCurrencyCompact(performance.avgLTV)}
                 </div>
                 <DollarSign className="w-8 h-8 text-yellow-400" />
               </div>

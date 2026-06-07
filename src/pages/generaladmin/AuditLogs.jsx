@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Layout from "../../components/dashboard/layouts/Layout";
 import { getAuditLogs, exportAuditLogsCSV } from "../../services/api/auditLogs";
+import { formatDate } from "../../utils/format";
 import {
   Search,
   Download,
@@ -103,10 +104,6 @@ const AuditLogs = () => {
     } finally {
       setExporting(false);
     }
-  };
-
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleString();
   };
 
   const formatJSON = (data) => {

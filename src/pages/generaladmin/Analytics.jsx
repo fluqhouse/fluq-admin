@@ -16,7 +16,7 @@ const Analytics = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-blue-300 text-sm">Total Revenue</p>
-                  <p className="text-white text-2xl font-bold">$83.2K</p>
+                  <p className="text-white text-2xl font-bold">₦83.2K</p>
                   <p className="text-green-400 text-sm">+12.5% from last month</p>
                 </div>
                 <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
@@ -68,7 +68,7 @@ const Analytics = () => {
                     <span className="text-slate-300">Lotto Games</span>
                   </div>
                   <div className="text-right">
-                    <p className="text-white font-semibold">$45.2K</p>
+                    <p className="text-white font-semibold">₦45.2K</p>
                     <p className="text-slate-400 text-sm">54.3%</p>
                   </div>
                 </div>
@@ -78,7 +78,7 @@ const Analytics = () => {
                     <span className="text-slate-300">Raffle Events</span>
                   </div>
                   <div className="text-right">
-                    <p className="text-white font-semibold">$38.0K</p>
+                    <p className="text-white font-semibold">₦38.0K</p>
                     <p className="text-slate-400 text-sm">45.7%</p>
                   </div>
                 </div>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Layout from "../../components/dashboard/layouts/Layout";
 import { useRaffleAnalytics } from "../../hooks/queries/useRaffleQueries";
+import { formatCurrency, formatNumber } from "../../utils/format";
 
 const Analytics = () => {
   const [dateFilter, setDateFilter] = useState("all");
@@ -55,7 +56,7 @@ const Analytics = () => {
                     <div>
                       <p className="text-blue-300 text-sm">Total Revenue</p>
                       <p className="text-white text-2xl font-bold">
-                        ₦{totalRevenue.toLocaleString()}
+                        {formatCurrency(totalRevenue)}
                       </p>
                     </div>
                     <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
@@ -109,7 +110,7 @@ const Analytics = () => {
                     <div>
                       <p className="text-yellow-300 text-sm">Tickets Sold</p>
                       <p className="text-white text-2xl font-bold">
-                        {totalTicketsSold.toLocaleString()}
+                        {formatNumber(totalTicketsSold)}
                       </p>
                     </div>
                     <div className="w-10 h-10 bg-yellow-600 rounded-lg flex items-center justify-center">
@@ -135,7 +136,7 @@ const Analytics = () => {
                     <div>
                       <p className="text-purple-300 text-sm">Unique Players</p>
                       <p className="text-white text-2xl font-bold">
-                        {totalPlayers.toLocaleString()}
+                        {formatNumber(totalPlayers)}
                       </p>
                     </div>
                     <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center">
@@ -176,11 +177,11 @@ const Analytics = () => {
                               {item.title}
                             </p>
                             <p className="text-slate-300 text-sm">
-                              {item.ticketsSold.toLocaleString()} tickets sold
+                              {formatNumber(item.ticketsSold)} tickets sold
                             </p>
                           </div>
                           <div className="text-green-400 font-semibold">
-                            ₦{item.revenue.toLocaleString()}
+                            {formatCurrency(item.revenue)}
                           </div>
                         </div>
                       ))}
@@ -210,13 +211,13 @@ const Analytics = () => {
                     <div className="flex justify-between items-center p-3 bg-slate-600/50 rounded-lg">
                       <p className="text-white font-medium">Total Players</p>
                       <div className="text-purple-400 font-semibold">
-                        {totalPlayers.toLocaleString()}
+                        {formatNumber(totalPlayers)}
                       </div>
                     </div>
                     <div className="flex justify-between items-center p-3 bg-slate-600/50 rounded-lg">
                       <p className="text-white font-medium">Total Revenue</p>
                       <div className="text-yellow-400 font-semibold">
-                        ₦{totalRevenue.toLocaleString()}
+                        {formatCurrency(totalRevenue)}
                       </div>
                     </div>
                   </div>

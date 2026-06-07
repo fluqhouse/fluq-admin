@@ -40,10 +40,53 @@ export const utcToLocalInput = (utcString) => {
 };
   
 
-export const formatCurrency = (amount) => {
+/**
+ * Format a number as Nigerian Naira currency.
+ * @param {number} amount - The amount to format
+ * @param {object} options - Formatting options
+ * @param {number} options.decimals - Number of decimal places (default: 0)
+ * @returns {string} Formatted currency string, e.g., "₦1,000,000"
+ */
+export const formatCurrency = (amount, { decimals = 0 } = {}) => {
+  if (amount === undefined || amount === null || isNaN(amount)) return "₦0";
   return new Intl.NumberFormat("en-NG", {
     style: "currency",
     currency: "NGN",
-    minimumFractionDigits: 0,
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
   }).format(amount);
+};
+
+/**
+ * Format a number as compact Nigerian Naira currency (with K, M abbreviations).
+ * @param {number} amount - The amount to format
+ * @returns {string} Formatted currency string, e.g., "₦1.5M" or "₦500K"
+ */
+export const formatCurrencyCompact = (amount) => {
+  if (amount === undefined || amount === null || isNaN(amount)) return "₦0";
+  if (amount >= 1000000) return "₦" + (amount / 1000000).toFixed(1) + "M";
+  if (amount >= 1000) return "₦" + (amount / 1000).toFixed(1) + "K";
+  return "₦" + amount.toLocaleString();
+};
+
+/**
+ * Format a number with thousand separators (no currency symbol).
+ * @param {number} num - The number to format
+ * @returns {string} Formatted number string, e.g., "1,000,000"
+ */
+export const formatNumber = (num) => {
+  if (num === undefined || num === null || isNaN(num)) return "0";
+  return num.toLocaleString();
+};
+
+/**
+ * Format a number in compact form (with K, M abbreviations, no currency symbol).
+ * @param {number} num - The number to format
+ * @returns {string} Formatted number string, e.g., "1.5M" or "500K"
+ */
+export const formatNumberCompact = (num) => {
+  if (num === undefined || num === null || isNaN(num)) return "0";
+  if (num >= 1000000) return (num / 1000000).toFixed(1) + "M";
+  if (num >= 1000) return (num / 1000).toFixed(1) + "K";
+  return num.toLocaleString();
 };

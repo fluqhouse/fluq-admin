@@ -30,7 +30,7 @@ const LottoManagerDashboard = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-green-300 text-sm">Today's Sales</p>
-                  <p className="text-white text-2xl font-bold">$3.2K</p>
+                  <p className="text-white text-2xl font-bold">₦3.2K</p>
                 </div>
                 <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
                   <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,7 +77,7 @@ const LottoManagerDashboard = () => {
               <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
                 <div>
                   <p className="text-white font-medium">Mega Millions</p>
-                  <p className="text-slate-400 text-sm">Jackpot: $2.5M</p>
+                  <p className="text-slate-400 text-sm">Jackpot: ₦2.5M</p>
                 </div>
                 <div className="text-right">
                   <p className="text-blue-400 text-sm">Tomorrow</p>
@@ -87,7 +87,7 @@ const LottoManagerDashboard = () => {
               <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
                 <div>
                   <p className="text-white font-medium">Daily Pick 3</p>
-                  <p className="text-slate-400 text-sm">Prize Pool: $50K</p>
+                  <p className="text-slate-400 text-sm">Prize Pool: ₦50K</p>
                 </div>
                 <div className="text-right">
                   <p className="text-green-400 text-sm">Today</p>
@@ -97,7 +97,7 @@ const LottoManagerDashboard = () => {
               <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
                 <div>
                   <p className="text-white font-medium">Lucky 7s</p>
-                  <p className="text-slate-400 text-sm">Jackpot: $750K</p>
+                  <p className="text-slate-400 text-sm">Jackpot: ₦750K</p>
                 </div>
                 <div className="text-right">
                   <p className="text-purple-400 text-sm">Friday</p>
@@ -116,7 +116,7 @@ const LottoManagerDashboard = () => {
                   <p className="text-slate-400 text-sm">Player: john.doe@email.com</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-green-400 text-sm">+$25.00</p>
+                  <p className="text-green-400 text-sm">+₦25.00</p>
                   <p className="text-slate-300 text-xs">2 min ago</p>
                 </div>
               </div>
@@ -126,7 +126,7 @@ const LottoManagerDashboard = () => {
                   <p className="text-slate-400 text-sm">Player: jane.smith@email.com</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-red-400 text-sm">-$150.00</p>
+                  <p className="text-red-400 text-sm">-₦150.00</p>
                   <p className="text-slate-300 text-xs">15 min ago</p>
                 </div>
               </div>
@@ -136,7 +136,7 @@ const LottoManagerDashboard = () => {
                   <p className="text-slate-400 text-sm">Player: mike.wilson@email.com</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-green-400 text-sm">+$200.00</p>
+                  <p className="text-green-400 text-sm">+₦200.00</p>
                   <p className="text-slate-300 text-xs">1 hour ago</p>
                 </div>
               </div>

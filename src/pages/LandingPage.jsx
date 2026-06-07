@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { formatNumber } from '../utils/format';
 
 const LandingPage = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -213,7 +214,7 @@ const LandingPage = () => {
                             </div>
                             <div className="flex items-center space-x-2">
                               <span className="text-slate-400">Participants:</span>
-                              <span className="text-blue-400 font-semibold">{raffle.participants.toLocaleString()}</span>
+                              <span className="text-blue-400 font-semibold">{formatNumber(raffle.participants)}</span>
                             </div>
                             <div className="flex items-center space-x-2">
                               <span className="text-slate-400">Date:</span>
