@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Layout from "../../components/dashboard/layouts/Layout";
 import { useUsers, useUpdateUserStatus, useDeleteUser } from "../../hooks/queries/useUserQueries";
+import { formatDate } from "../../utils/format";
 import {
   Search,
   RefreshCw,
@@ -13,8 +14,6 @@ import {
   ShieldCheck,
   Trash2,
   CheckCircle,
-  XCircle,
-  Eye,
   Edit2,
 } from "lucide-react";
 import { USER_ROLES_CONFIG, ROLES } from "../../constants";
@@ -32,7 +31,6 @@ const STATUS_OPTIONS = [
 ];
 
 const UserManagement = () => {
-  const queryClient = useQueryClient();
   const [success, setSuccess] = useState(null);
 
   const [filters, setFilters] = useState({
@@ -94,11 +92,6 @@ const UserManagement = () => {
   const actionError = updateMutation.error || deleteMutation.error;
   
   const displayError = error || (actionError ? (actionError.error?.message || actionError.message || "Failed to handle action") : null);
-
-  const formatDate = (dateString) => {
-    if (!dateString) return "-";
-    return new Date(dateString).toLocaleDateString();
-  };
 
   const getRoleBadgeColor = (role) => {
     switch (role) {
