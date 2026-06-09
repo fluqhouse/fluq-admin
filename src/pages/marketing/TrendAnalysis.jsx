@@ -194,30 +194,30 @@ const TrendAnalysis = () => {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <PredictiveCard
               title="User Growth Rate"
-              value={`${(predictive.userGrowthRate || 0).toFixed(1)}%`}
+              value={`${parseFloat(predictive.userGrowthRate || 0).toFixed(1)}%`}
               icon={Users}
               color="bg-green-500"
-              trend={predictive.userGrowthRate}
+              trend={parseFloat(predictive.userGrowthRate || 0)}
               loading={loading}
             />
             <PredictiveCard
               title="Revenue Growth Rate"
-              value={`${(predictive.revenueGrowthRate || 0).toFixed(1)}%`}
+              value={`${parseFloat(predictive.revenueGrowthRate || 0).toFixed(1)}%`}
               icon={TrendingUp}
               color="bg-blue-500"
-              trend={predictive.revenueGrowthRate}
+              trend={parseFloat(predictive.revenueGrowthRate || 0)}
               loading={loading}
             />
             <PredictiveCard
               title="Projected Users (30d)"
-              value={formatNumber(predictive.projectedUsers30Days)}
+              value={formatNumber(predictive.projectedUsers30Days || predictive.projectedUsers || 0)}
               icon={Target}
               color="bg-purple-500"
               loading={loading}
             />
             <PredictiveCard
               title="Projected Revenue (30d)"
-              value={formatCurrencyCompact(predictive.projectedRevenue30Days)}
+              value={formatCurrencyCompact(predictive.projectedRevenue30Days || 0)}
               icon={DollarSign}
               color="bg-yellow-500"
               loading={loading}

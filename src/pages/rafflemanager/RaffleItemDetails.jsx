@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Layout from "../../components/dashboard/layouts/Layout";
-import ConfirmationModal from "../../components/dashboard/reuseables/ConfirmationModal";
 import {
   useItemById,
   useItemStatistics,
   useCategories,
   useUpdateItem,
-  useCloseItem,
-  useArchiveItem,
   useSubmitDrawResults,
+  useWinningTickets,
 } from "../../hooks/queries/useRaffleQueries";
 import { formatCurrency, formatDate } from "../../utils/format";
 import { EditItemModal } from "../../components/raffle/EditItemModal";
@@ -21,10 +19,6 @@ const RaffleItemDetails = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [showEditModal, setShowEditModal] = useState(false);
   const [isSubmittingDraw, setIsSubmittingDraw] = useState(false);
-  const [confirmModal, setConfirmModal] = useState({
-    isOpen: false,
-    action: null,
-  });
 
   const {
     data: itemData,
@@ -36,8 +30,6 @@ const RaffleItemDetails = () => {
   const { data: statsData, isLoading: isLoadingStats } = useItemStatistics(id);
   const { data: categoriesData } = useCategories();
   const updateItemMutation = useUpdateItem();
-  const closeItemMutation = useCloseItem();
-  const archiveItemMutation = useArchiveItem();
   const submitDrawMutation = useSubmitDrawResults();
 
   const item = itemData?.data;
@@ -99,61 +91,6 @@ const RaffleItemDetails = () => {
       refetchItem();
     } catch (error) {
       console.error("Failed to submit draw results:", error);
-    }
-  };
-
-  const openConfirmModal = (action) => {
-    setConfirmModal({ isOpen: true, action });
-  };
-
-  const closeConfirmModal = () => {
-    setConfirmModal({ isOpen: false, action: null });
-  };
-
-  const handleConfirmAction = async () => {
-    const { action } = confirmModal;
-
-    try {
-      switch (action) {
-        case "close":
-          await closeItemMutation.mutateAsync(id);
-          refetchItem();
-          break;
-        case "archive":
-          await archiveItemMutation.mutateAsync(id);
-          refetchItem();
-          break;
-        default:
-          return;
-      }
-      closeConfirmModal();
-    } catch (error) {
-      console.error(`Failed to ${action} item:`, error);
-      closeConfirmModal();
-    }
-  };
-
-  const getConfirmModalProps = () => {
-    const { action } = confirmModal;
-    switch (action) {
-      case "close":
-        return {
-          title: "Close Raffle",
-          message:
-            "Are you sure you want to close this raffle? This will stop ticket sales and prepare for draw.",
-          confirmText: "Close Raffle",
-          type: "warning",
-        };
-      case "archive":
-        return {
-          title: "Archive Raffle",
-          message:
-            "Are you sure you want to archive this raffle? This action can be undone later.",
-          confirmText: "Archive",
-          type: "warning",
-        };
-      default:
-        return {};
     }
   };
 
@@ -281,35 +218,21 @@ const RaffleItemDetails = () => {
 
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-2 mt-4">
-            {item?.status === "open" && (
-              <>
-                <button
-                  onClick={() => openConfirmModal("close")}
-                  className="px-4 py-2 bg-orange-600/20 text-orange-400 hover:bg-orange-600/30 text-sm rounded-lg transition-colors"
-                  disabled={closeItemMutation.isPending}
-                >
-                  Close Raffle
-                </button>
-              </>
-            )}
-
-            {item?.status === "closed" && (
-              <>
-                <button
-                  onClick={() => setIsSubmittingDraw(true)}
-                  className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-sm rounded-lg transition-colors"
-                >
-                  Conduct Draw
-                </button>
-              </>
-            )}
-
-            {item?.status === "completed" && (
+            {item?.status === "closed" && !item?.winners_selected && (
               <button
-                onClick={() => navigate(`/rafflemanager/items/${id}/results`)}
+                onClick={() => setIsSubmittingDraw(true)}
+                className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-sm rounded-lg transition-colors"
+              >
+                Conduct Draw
+              </button>
+            )}
+
+            {item?.winners_selected && (
+              <button
+                onClick={() => navigate(`/logistics/claims`)}
                 className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm rounded-lg transition-colors"
               >
-                View Draw Results
+                View Claims (Logistics)
               </button>
             )}
 
@@ -319,16 +242,6 @@ const RaffleItemDetails = () => {
                 className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm rounded-lg transition-colors"
               >
                 Edit Item
-              </button>
-            )}
-
-            {item?.status === "completed" && (
-              <button
-                onClick={() => openConfirmModal("archive")}
-                className="px-4 py-2 bg-slate-600/20 text-slate-400 hover:bg-slate-600/30 text-sm rounded-lg transition-colors"
-                disabled={archiveItemMutation.isPending}
-              >
-                Archive
               </button>
             )}
           </div>
@@ -850,17 +763,6 @@ const RaffleItemDetails = () => {
           categories={categories}
           onSubmit={handleUpdate}
           isUpdating={updateItemMutation.isPending}
-        />
-
-        {/* Confirmation Modal */}
-        <ConfirmationModal
-          isOpen={confirmModal.isOpen}
-          onClose={closeConfirmModal}
-          onConfirm={handleConfirmAction}
-          isLoading={
-            closeItemMutation.isPending || archiveItemMutation.isPending
-          }
-          {...getConfirmModalProps()}
         />
       </div>
     </Layout>

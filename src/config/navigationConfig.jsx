@@ -46,28 +46,12 @@ const GeneralAdminDashboard = React.lazy(
   () => import("../pages/dashboard/GeneralAdminDashboard"),
 );
 
-const LogisticsDashboard = React.lazy(
-  () => import("../pages/dashboard/LogisticsDashboard"),
-);
-
 // General Admin Pages
 const LottoOverview = React.lazy(
   () => import("../pages/generaladmin/LottoOverview"),
 );
 const RaffleOverview = React.lazy(
   () => import("../pages/generaladmin/RaffleOverview"),
-);
-const LogisticsOverview = React.lazy(
-  () => import("../pages/generaladmin/LogisticsOverview"),
-);
-const GeneralAnalytics = React.lazy(
-  () => import("../pages/generaladmin/Analytics"),
-);
-const GeneralReports = React.lazy(
-  () => import("../pages/generaladmin/Reports"),
-);
-const GeneralSettings = React.lazy(
-  () => import("../pages/generaladmin/Settings"),
 );
 
 // Wallet Admin Pages
@@ -104,9 +88,6 @@ const RevenueAnalytics = React.lazy(
 const TrendAnalysis = React.lazy(
   () => import("../pages/marketing/TrendAnalysis"),
 );
-const MarketingSettings = React.lazy(
-  () => import("../pages/marketing/MarketingSettings"),
-);
 
 // Lotto Manager Pages
 const LottoGames = React.lazy(() => import("../pages/lottomanager/Games"));
@@ -123,9 +104,6 @@ const LottoAnalytics = React.lazy(
   () => import("../pages/lottomanager/Analytics"),
 );
 const LottoReports = React.lazy(() => import("../pages/lottomanager/Reports"));
-const LottoSettings = React.lazy(
-  () => import("../pages/lottomanager/Settings"),
-);
 
 // Raffle Manager Pages
 const RaffleItems = React.lazy(
@@ -152,20 +130,8 @@ const RaffleAnalytics = React.lazy(
 const RaffleReports = React.lazy(
   () => import("../pages/rafflemanager/Reports"),
 );
-const RaffleSettings = React.lazy(
-  () => import("../pages/rafflemanager/Settings"),
-);
 
-// Logistics Pages
-const Inventory = React.lazy(() => import("../pages/logistics/Inventory"));
-const Shipments = React.lazy(() => import("../pages/logistics/Shipments"));
-const Tracking = React.lazy(() => import("../pages/logistics/Tracking"));
-const LogisticsReports = React.lazy(() => import("../pages/logistics/Reports"));
-const LogisticsSettings = React.lazy(
-  () => import("../pages/logistics/Settings"),
-);
-
-// ✅ NEW: Claims Management Pages
+// Logistics Pages - Claims Management
 const ClaimsManagement = React.lazy(
   () => import("../pages/logistics/ClaimsManagement"),
 );
@@ -257,14 +223,6 @@ export const ROLE_NAVIGATION = {
       component: RaffleOverview,
     },
     {
-      path: "/generaladmin/logistics",
-      text: "Logistics Overview",
-      icon: "logistics",
-      component: LogisticsOverview,
-    },
-    // ✅ NEW: Wallet Management
-
-    {
       path: "/generaladmin/wallets/all",
       text: "All Wallets",
       icon: "walletList",
@@ -275,18 +233,6 @@ export const ROLE_NAVIGATION = {
       text: "Wallet Transactions",
       icon: "transactions",
       component: WalletTransactions,
-    },
-    {
-      path: "/generaladmin/analytics",
-      text: "Analytics",
-      icon: "analytics",
-      component: GeneralAnalytics,
-    },
-    {
-      path: "/generaladmin/reports",
-      text: "Reports",
-      icon: "reports",
-      component: GeneralReports,
     },
     {
       path: "/generaladmin/admin-management",
@@ -305,12 +251,6 @@ export const ROLE_NAVIGATION = {
       text: "Audit Logs",
       icon: "auditLogs",
       component: AuditLogs,
-    },
-    {
-      path: "/generaladmin/settings",
-      text: "Settings",
-      icon: "settings",
-      component: GeneralSettings,
     },
   ],
 
@@ -357,12 +297,6 @@ export const ROLE_NAVIGATION = {
       icon: "reports",
       component: LottoReports,
     },
-    {
-      path: "/lottomanager/settings",
-      text: "Settings",
-      icon: "settings",
-      component: LottoSettings,
-    },
   ],
 
   // =======================================================================
@@ -407,7 +341,6 @@ export const ROLE_NAVIGATION = {
       icon: "analytics",
       component: RaffleAnalytics,
     },
-    // ✅ NEW: LGA Analytics - Now visible in sidebar
     {
       path: "/rafflemanager/analytics/local-government",
       text: "LGA Analytics",
@@ -420,75 +353,31 @@ export const ROLE_NAVIGATION = {
       icon: "reports",
       component: RaffleReports,
     },
-    {
-      path: "/rafflemanager/settings",
-      text: "Settings",
-      icon: "settings",
-      component: RaffleSettings,
-    },
   ],
 
   // =======================================================================
-  // LOGISTICS - Supply chain, fulfillment, and claims management
+  // LOGISTICS - Claims management and prize fulfillment
   // =======================================================================
   logistics: [
-    {
-      path: "/logistics/dashboard",
-      text: "Dashboard",
-      icon: "dashboard",
-      component: LogisticsDashboard,
-      isDashboard: true,
-    },
-    // ✅ NEW: Claims Management Section
     {
       path: "/logistics/claims/:claimId",
       text: "Claim Detail",
       icon: "claims",
       component: ClaimDetail,
-      hideFromSidebar: true, // Hidden - accessed via claims list
+      hideFromSidebar: true,
     },
     {
       path: "/logistics/claims",
       text: "Claims Management",
       icon: "claims",
       component: ClaimsManagement,
+      isDashboard: true,
     },
     {
       path: "/logistics/verify-claim",
       text: "Verify Claim",
       icon: "verifyClaim",
       component: VerifyClaim,
-    },
-    // Existing Logistics Pages
-    {
-      path: "/logistics/inventory",
-      text: "Inventory",
-      icon: "inventory",
-      component: Inventory,
-    },
-    {
-      path: "/logistics/shipments",
-      text: "Shipments",
-      icon: "shipments",
-      component: Shipments,
-    },
-    {
-      path: "/logistics/tracking",
-      text: "Tracking",
-      icon: "tracking",
-      component: Tracking,
-    },
-    {
-      path: "/logistics/reports",
-      text: "Reports",
-      icon: "reports",
-      component: LogisticsReports,
-    },
-    {
-      path: "/logistics/settings",
-      text: "Settings",
-      icon: "settings",
-      component: LogisticsSettings,
     },
   ],
 
@@ -521,12 +410,6 @@ export const ROLE_NAVIGATION = {
       icon: "trendAnalysis",
       component: TrendAnalysis,
     },
-    {
-      path: "/marketing/settings",
-      text: "Settings",
-      icon: "settings",
-      component: MarketingSettings,
-    },
   ],
 
   // =======================================================================
@@ -553,14 +436,6 @@ export const ROLE_NAVIGATION = {
       component: RaffleOverview,
     },
     {
-      path: "/generaladmin/logistics",
-      text: "Logistics Overview",
-      icon: "logistics",
-      component: LogisticsOverview,
-    },
-    // ✅ NEW: Wallet Management
-
-    {
       path: "/generaladmin/wallets/all",
       text: "All Wallets",
       icon: "walletList",
@@ -572,7 +447,6 @@ export const ROLE_NAVIGATION = {
       icon: "transactions",
       component: WalletTransactions,
     },
-
     {
       path: "/lottomanager/games/:gameId",
       text: "Game Details",
@@ -585,7 +459,6 @@ export const ROLE_NAVIGATION = {
       text: "Lotto Games",
       icon: "lotto",
       component: LottoGames,
-      isDashboard: true,
     },
     {
       path: "/lottomanager/transactions",
@@ -631,20 +504,13 @@ export const ROLE_NAVIGATION = {
       icon: "analytics",
       component: RaffleAnalytics,
     },
-    // ✅ NEW: LGA Analytics for superadmin - Now visible in sidebar
     {
       path: "/rafflemanager/analytics/local-government",
       text: "Raffle LGA Analytics",
       icon: "lga",
       component: LocalGovernmentStats,
     },
-    // ✅ NEW: Logistics with Claims Management for superadmin
-    {
-      path: "/logistics/dashboard",
-      text: "Logistics Dashboard",
-      icon: "dashboard",
-      component: LogisticsDashboard,
-    },
+    // Logistics - Claims Management for superadmin
     {
       path: "/logistics/claims/:claimId",
       text: "Claim Detail",
@@ -663,30 +529,6 @@ export const ROLE_NAVIGATION = {
       text: "Verify Claim",
       icon: "verifyClaim",
       component: VerifyClaim,
-    },
-    {
-      path: "/logistics/inventory",
-      text: "Inventory Management",
-      icon: "inventory",
-      component: Inventory,
-    },
-    {
-      path: "/logistics/shipments",
-      text: "Shipments",
-      icon: "shipments",
-      component: Shipments,
-    },
-    {
-      path: "/generaladmin/analytics",
-      text: "System Analytics",
-      icon: "analytics",
-      component: GeneralAnalytics,
-    },
-    {
-      path: "/generaladmin/reports",
-      text: "System Reports",
-      icon: "reports",
-      component: GeneralReports,
     },
     {
       path: "/generaladmin/admin-management",
@@ -730,12 +572,6 @@ export const ROLE_NAVIGATION = {
       text: "Trend Analysis",
       icon: "trendAnalysis",
       component: TrendAnalysis,
-    },
-    {
-      path: "/generaladmin/settings",
-      text: "System Settings",
-      icon: "settings",
-      component: GeneralSettings,
     },
   ],
 };

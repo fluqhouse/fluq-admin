@@ -10,13 +10,18 @@ const QUERY_KEYS = {
   ITEM: "item",
   ITEM_STATISTICS: "itemStatistics",
   GLOBAL_STATISTICS: "globalStatistics",
-  DRAW_RESULTS: "drawResults",
-  TICKET_RESULT: "ticketResult",
+  TICKET_STATISTICS: "ticketStatistics",
+  BOOKED_TICKETS: "bookedTickets",
+  WINNING_TICKETS: "winningTickets",
   LGA_STATISTICS: "lgaStatistics",
   LGA_TICKETS: "lgaTickets",
+  CLAIMS: "claims",
+  CLAIM_APPROVAL: "claimApproval",
 };
 
+// ========================================
 // Category Hooks
+// ========================================
 export const useCategories = (options = {}) => {
   return useQuery({
     queryKey: [QUERY_KEYS.RAFFLE, QUERY_KEYS.CATEGORIES],
@@ -96,7 +101,9 @@ export const useDeactivateCategory = () => {
   });
 };
 
+// ========================================
 // Item Hooks
+// ========================================
 export const useItems = (params = {}, options = {}) => {
   return useQuery({
     queryKey: [QUERY_KEYS.RAFFLE, QUERY_KEYS.ITEMS, params],
@@ -155,7 +162,6 @@ export const useCreateItem = () => {
 
       if (error.response?.data) {
         const errorData = error.response.data;
-        // Handle validation errors from backend (details array)
         if (errorData.details && Array.isArray(errorData.details)) {
           const errorMessages = errorData.details
             .map((err) => `${err.field}: ${err.message}`)
@@ -223,22 +229,37 @@ export const useDeleteItem = () => {
   });
 };
 
-// Draw Hooks
-export const useDrawResults = (itemId, options = {}) => {
+// ========================================
+// Ticket Statistics Hooks
+// ========================================
+export const useTicketStatistics = (itemId, options = {}) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.RAFFLE, QUERY_KEYS.DRAW_RESULTS, itemId],
-    queryFn: () => raffleAPI.getDrawResults(itemId),
+    queryKey: [QUERY_KEYS.RAFFLE, QUERY_KEYS.TICKET_STATISTICS, itemId],
+    queryFn: () => raffleAPI.getTicketStatistics(itemId),
     enabled: !!itemId,
     staleTime: 2 * 60 * 1000,
     ...options,
   });
 };
 
-export const useTicketDrawResult = (ticketId, options = {}) => {
+export const useBookedTickets = (itemId, iconName, options = {}) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.RAFFLE, QUERY_KEYS.TICKET_RESULT, ticketId],
-    queryFn: () => raffleAPI.getTicketDrawResult(ticketId),
-    enabled: !!ticketId && options.enabled !== false,
+    queryKey: [QUERY_KEYS.RAFFLE, QUERY_KEYS.BOOKED_TICKETS, itemId, iconName],
+    queryFn: () => raffleAPI.getBookedTickets(itemId, iconName),
+    enabled: !!itemId,
+    staleTime: 2 * 60 * 1000,
+    ...options,
+  });
+};
+
+// ========================================
+// Draw/Winner Hooks
+// ========================================
+export const useWinningTickets = (itemId, options = {}) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.RAFFLE, QUERY_KEYS.WINNING_TICKETS, itemId],
+    queryFn: () => raffleAPI.getWinningTickets(itemId),
+    enabled: !!itemId,
     staleTime: 2 * 60 * 1000,
     ...options,
   });
@@ -266,9 +287,12 @@ export const useSubmitDrawResults = () => {
       queryClient.invalidateQueries({
         queryKey: [
           QUERY_KEYS.RAFFLE,
-          QUERY_KEYS.DRAW_RESULTS,
+          QUERY_KEYS.WINNING_TICKETS,
           variables.itemId,
         ],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.RAFFLE, QUERY_KEYS.CLAIMS],
       });
       toast.success(data.message || "Draw results submitted successfully");
     },
@@ -280,49 +304,9 @@ export const useSubmitDrawResults = () => {
   });
 };
 
-export const useCloseItem = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: raffleAPI.closeItem,
-    onSuccess: (data, itemId) => {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.RAFFLE, QUERY_KEYS.ITEMS],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.RAFFLE, QUERY_KEYS.ITEM, itemId],
-      });
-      toast.success(data.message || "Item closed successfully");
-    },
-    onError: (error) => {
-      const message = error.response?.data?.message || "Failed to close item";
-      toast.error(message, { autoClose: 5000 });
-    },
-  });
-};
-
-export const useArchiveItem = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: raffleAPI.archiveItem,
-    onSuccess: (data, itemId) => {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.RAFFLE, QUERY_KEYS.ITEMS],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.RAFFLE, QUERY_KEYS.ITEM, itemId],
-      });
-      toast.success(data.message || "Item archived successfully");
-    },
-    onError: (error) => {
-      const message = error.response?.data?.message || "Failed to archive item";
-      toast.error(message, { autoClose: 5000 });
-    },
-  });
-};
-
+// ========================================
 // Local Government Analytics Hooks
+// ========================================
 export const useLocalGovernmentTickets = (params = {}, options = {}) => {
   return useQuery({
     queryKey: [QUERY_KEYS.RAFFLE, QUERY_KEYS.LGA_TICKETS, params],
@@ -332,7 +316,18 @@ export const useLocalGovernmentTickets = (params = {}, options = {}) => {
   });
 };
 
+export const useLocalGovernmentStatistics = (params = {}, options = {}) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.RAFFLE, QUERY_KEYS.LGA_STATISTICS, params],
+    queryFn: () => raffleAPI.getLocalGovernmentStatistics(params),
+    staleTime: 5 * 60 * 1000,
+    ...options,
+  });
+};
+
+// ========================================
 // Raffle Analytics Hook
+// ========================================
 export const useRaffleAnalytics = (params = {}, options = {}) => {
   return useQuery({
     queryKey: [QUERY_KEYS.RAFFLE, "analytics", params],
@@ -342,7 +337,9 @@ export const useRaffleAnalytics = (params = {}, options = {}) => {
   });
 };
 
-// Raffle Reports Overview Hook
+// ========================================
+// Raffle Reports Hooks
+// ========================================
 export const useRaffleReportsOverview = (options = {}) => {
   return useQuery({
     queryKey: [QUERY_KEYS.RAFFLE, "reportsOverview"],
@@ -352,7 +349,6 @@ export const useRaffleReportsOverview = (options = {}) => {
   });
 };
 
-// Generate Raffle Report (CSV download mutation)
 export const useGenerateRaffleReport = () => {
   return useMutation({
     mutationFn: (params) => raffleAPI.generateRaffleReport(params),
@@ -375,12 +371,96 @@ export const useGenerateRaffleReport = () => {
   });
 };
 
+// ========================================
 // Raffle Transactions Hook
+// ========================================
 export const useRaffleTransactions = (params = {}, options = {}) => {
   return useQuery({
     queryKey: [QUERY_KEYS.RAFFLE, "transactions", params],
     queryFn: () => raffleAPI.getRaffleTransactions(params),
     staleTime: 1 * 60 * 1000,
     ...options,
+  });
+};
+
+// ========================================
+// Claims Management Hooks
+// ========================================
+export const useClaimsForItem = (itemId, status, options = {}) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.RAFFLE, QUERY_KEYS.CLAIMS, itemId, status],
+    queryFn: () => raffleAPI.getClaimsForItem(itemId, status),
+    enabled: !!itemId,
+    staleTime: 1 * 60 * 1000,
+    ...options,
+  });
+};
+
+export const useClaimApproval = (claimId, options = {}) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.RAFFLE, QUERY_KEYS.CLAIM_APPROVAL, claimId],
+    queryFn: () => raffleAPI.checkClaimApproval(claimId),
+    enabled: !!claimId,
+    staleTime: 30 * 1000,
+    refetchInterval: 10 * 1000,
+    ...options,
+  });
+};
+
+export const useResendPickupCode = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: raffleAPI.resendPickupCode,
+    onSuccess: (data) => {
+      toast.success(data.message || "Pickup code resent successfully");
+    },
+    onError: (error) => {
+      const message =
+        error.response?.data?.message || "Failed to resend pickup code";
+      toast.error(message);
+    },
+  });
+};
+
+export const useVerifyClaim = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: raffleAPI.verifyClaim,
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.RAFFLE, QUERY_KEYS.CLAIMS],
+      });
+      toast.success(data.message || "Claim verified successfully");
+    },
+    onError: (error) => {
+      const message =
+        error.response?.data?.message || "Failed to verify claim";
+      toast.error(message);
+    },
+  });
+};
+
+export const useProcessFinalClaim = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ claimId, notes }) =>
+      raffleAPI.processFinalClaim(claimId, notes),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.RAFFLE, QUERY_KEYS.CLAIMS],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.RAFFLE, QUERY_KEYS.CLAIM_APPROVAL],
+      });
+      toast.success(data.message || "Claim processed successfully");
+    },
+    onError: (error) => {
+      const message =
+        error.response?.data?.message || "Failed to process claim";
+      toast.error(message);
+    },
   });
 };

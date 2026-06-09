@@ -1,7 +1,9 @@
 import api from "./axios.js";
 
 export const raffleAPI = {
+  // ========================================
   // Category endpoints
+  // ========================================
   getAllCategories: async () => {
     const response = await api.get("/api/raffle/category");
     return response.data;
@@ -35,7 +37,9 @@ export const raffleAPI = {
     return response.data;
   },
 
+  // ========================================
   // Item endpoints
+  // ========================================
   getAllItems: async (params = {}) => {
     const {
       page = 1,
@@ -115,51 +119,72 @@ export const raffleAPI = {
     return response.data;
   },
 
-  // Draw endpoints
+  // ========================================
+  // Ticket Statistics endpoints
+  // ========================================
+  getTicketStatistics: async (itemId) => {
+    const response = await api.get(`/api/raffle/tickets/statistics/${itemId}`);
+    return response.data;
+  },
+
+  getBookedTickets: async (itemId, iconName) => {
+    const queryParams = new URLSearchParams();
+    if (iconName) queryParams.append("iconName", iconName);
+
+    const response = await api.get(
+      `/api/raffle/tickets/booked/${itemId}${queryParams.toString() ? `?${queryParams.toString()}` : ""}`,
+    );
+    return response.data;
+  },
+
+  // ========================================
+  // Draw/Winner endpoints
+  // ========================================
   submitDrawResults: async (drawData) => {
     const response = await api.post("/api/raffle/tickets/winners", drawData);
     return response.data;
   },
 
-  getDrawResults: async (itemId) => {
-    const response = await api.get(`/api/raffle/draw/${itemId}/results`); //todo in the backend
+  getWinningTickets: async (itemId) => {
+    const response = await api.get(`/api/raffle/${itemId}/winning-tickets`);
     return response.data;
   },
 
-  getTicketDrawResult: async (ticketId) => {
-    const response = await api.get(`/api/raffle/draw/ticket/${ticketId}`); //todo in the backend
-    return response.data;
-  },
-
-  closeItem: async (id) => {
-    const response = await api.patch(`/api/raffle/items/${id}/close`); //todo in the backend
-    return response.data;
-  },
-
-  archiveItem: async (id) => {
-    const response = await api.patch(`/api/raffle/items/${id}/archive`); //todo in the backend
-    return response.data;
-  },
-
+  // ========================================
   // Local Government Analytics endpoints
+  // ========================================
   getLocalGovernmentTickets: async (params = {}) => {
-    const { itemId, localGovernment, state, country } = params;
+    const { itemId, localGovernment, state, country, limit, offset } = params;
     const queryParams = new URLSearchParams();
 
     if (itemId) queryParams.append("itemId", itemId);
     if (localGovernment) queryParams.append("localGovernment", localGovernment);
     if (state) queryParams.append("state", state);
     if (country) queryParams.append("country", country);
+    if (limit) queryParams.append("limit", limit);
+    if (offset) queryParams.append("offset", offset);
 
     const response = await api.get(
-      `/api/raffle/tickets/by-local-government${
-        queryParams.toString() ? `?${queryParams.toString()}` : ""
-      }`,
+      `/api/raffle/tickets/by-local-government${queryParams.toString() ? `?${queryParams.toString()}` : ""}`,
     );
     return response.data;
   },
 
+  getLocalGovernmentStatistics: async (params = {}) => {
+    const { itemId } = params;
+    const queryParams = new URLSearchParams();
+
+    if (itemId) queryParams.append("itemId", itemId);
+
+    const response = await api.get(
+      `/api/raffle/statistics/local-government${queryParams.toString() ? `?${queryParams.toString()}` : ""}`,
+    );
+    return response.data;
+  },
+
+  // ========================================
   // Analytics endpoint
+  // ========================================
   getRaffleAnalytics: async (params = {}) => {
     const { dateFilter, startDate, endDate } = params;
     const queryParams = new URLSearchParams();
@@ -172,13 +197,14 @@ export const raffleAPI = {
     return response.data;
   },
 
-  // Reports overview endpoint
+  // ========================================
+  // Reports endpoints
+  // ========================================
   getRaffleReportsOverview: async () => {
     const response = await api.get("/api/raffle/reports/overview");
     return response.data;
   },
 
-  // Generate CSV report endpoint (returns blob)
   generateRaffleReport: async (params = {}) => {
     const { type, dateFilter, startDate, endDate } = params;
     const queryParams = new URLSearchParams({ type });
@@ -192,7 +218,9 @@ export const raffleAPI = {
     return response;
   },
 
+  // ========================================
   // Transactions endpoint
+  // ========================================
   getRaffleTransactions: async (params = {}) => {
     const {
       page = 1,
@@ -210,6 +238,39 @@ export const raffleAPI = {
     const response = await api.get(
       `/api/raffle/transactions?${queryParams.toString()}`,
     );
+    return response.data;
+  },
+
+  // ========================================
+  // Claims Management endpoints
+  // ========================================
+  getClaimsForItem: async (itemId, status) => {
+    const queryParams = new URLSearchParams();
+    if (status) queryParams.append("status", status);
+
+    const response = await api.get(
+      `/api/raffle/claims/${itemId}${queryParams.toString() ? `?${queryParams.toString()}` : ""}`,
+    );
+    return response.data;
+  },
+
+  resendPickupCode: async (data) => {
+    const response = await api.post("/api/raffle/claims/resend-pickup-code", data);
+    return response.data;
+  },
+
+  verifyClaim: async (data) => {
+    const response = await api.post("/api/raffle/claims/verify-claim", data);
+    return response.data;
+  },
+
+  checkClaimApproval: async (claimId) => {
+    const response = await api.get(`/api/raffle/claims/claim-approval/${claimId}`);
+    return response.data;
+  },
+
+  processFinalClaim: async (claimId, notes) => {
+    const response = await api.post(`/api/raffle/claims/process-claim/${claimId}`, { notes });
     return response.data;
   },
 };
