@@ -48,6 +48,13 @@ export const PORTALS = [
     role: ROLES.MARKETING_ADMIN,
     icon: 'marketing',
   },
+  {
+    id: 'supportadmin',
+    title: 'Support Admin',
+    description: 'Manage customer support conversations and chat with users in real-time.',
+    role: ROLES.SUPPORT_ADMIN,
+    icon: 'support',
+  },
 ];
 
 /**

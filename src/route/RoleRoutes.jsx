@@ -26,6 +26,8 @@ const roleRoutes = [
       allowedRoles.push(ROLES.LOGISTICS);
     } else if (route.path.startsWith("/marketing")) {
       allowedRoles.push(ROLES.MARKETING_ADMIN);
+    } else if (route.path.startsWith("/support")) {
+      allowedRoles.push(ROLES.SUPPORT_ADMIN);
     }
 
     return (

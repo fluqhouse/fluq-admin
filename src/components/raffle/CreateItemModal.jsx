@@ -9,6 +9,7 @@ import {
   DollarSign,
   Ticket,
   Trophy,
+  Users,
 } from "lucide-react";
 import InputField from "../dashboard/reuseables/InputField";
 import FileUploadZone from "../dashboard/reuseables/FileUploadZone";
@@ -20,6 +21,18 @@ export const CreateItemModal = ({
   onSubmit,
   isCreating,
 }) => {
+  // Available character icons (40 total)
+  const RAFFLE_CHARACTERS = [
+    "BaddoKing", "SlayMama", "JapaRunner", "SapaWarrior", "OmoGhetto",
+    "WahalaBoss", "PepperDem", "ChopLife", "SharpGuy", "GbeduMaster",
+    "CruiseLord", "StreetSensei", "OmoAye", "EChoke", "ZazuChamp",
+    "HustleSpartan", "VibeMachine", "NoDeyTire", "KpakoFlex", "OnCodePlug",
+    "SkrrrBoi", "MadamNoStress", "DeyPlayChamp", "YahooPriest", "SoftLifeGen",
+    "DeyDerDey", "BetaBoi", "BigWahala", "OmoLogo", "ShishiNoDey",
+    "AbegNa", "GenzTins", "EForEnergy", "TalkuNaDo", "ESure4Me",
+    "AjebutterX", "CommotBody", "NoWahalaZone", "OGNaija", "ScatterGround",
+  ];
+
   const [formData, setFormData] = useState({
     categoryId: "",
     title: "",
@@ -29,6 +42,7 @@ export const CreateItemModal = ({
     endTime: "",
     ticketsPerIcon: "",
     expectedWinners: "",
+    numberOfIcons: "40",
   });
 
   const [files, setFiles] = useState({
@@ -169,6 +183,9 @@ export const CreateItemModal = ({
     if (!formData.expectedWinners || formData.expectedWinners < 1) {
       newErrors.expectedWinners = "Must have at least 1 expected winner";
     }
+    if (!formData.numberOfIcons || formData.numberOfIcons < 1 || formData.numberOfIcons > 40) {
+      newErrors.numberOfIcons = "Must be between 1 and 40 characters";
+    }
     if (!files.frontImage) newErrors.frontImage = "Front image is required";
     if (!files.sideImage) newErrors.sideImage = "Side image is required";
 
@@ -197,6 +214,7 @@ export const CreateItemModal = ({
     submitData.append("endTime", toISOString(formData.endTime));
     submitData.append("ticketsPerIcon", formData.ticketsPerIcon);
     submitData.append("expectedWinners", formData.expectedWinners);
+    submitData.append("numberOfIcons", formData.numberOfIcons);
     submitData.append("frontImage", files.frontImage);
     submitData.append("sideImage", files.sideImage);
     if (files.video) {
@@ -346,17 +364,56 @@ export const CreateItemModal = ({
               />
             </div>
 
-            <InputField
-              name="ticketsPerIcon"
-              label="Tickets Per Icon"
-              type="number"
-              icon={Ticket}
-              placeholder="100"
-              value={formData.ticketsPerIcon}
-              onChange={handleInputChange}
-              min="1"
-              required
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <InputField
+                name="ticketsPerIcon"
+                label="Tickets Per Character"
+                type="number"
+                icon={Ticket}
+                placeholder="100"
+                value={formData.ticketsPerIcon}
+                onChange={handleInputChange}
+                min="1"
+                required
+              />
+
+              <InputField
+                name="numberOfIcons"
+                label="Number of Characters (1-40)"
+                type="number"
+                icon={Users}
+                placeholder="40"
+                value={formData.numberOfIcons}
+                onChange={handleInputChange}
+                min="1"
+                max="40"
+                required
+              />
+            </div>
+
+            {/* Character Preview */}
+            {formData.numberOfIcons && formData.numberOfIcons > 0 && formData.numberOfIcons <= 40 && (
+              <div className="bg-slate-700/30 rounded-lg p-4 border border-slate-600/50">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="text-sm font-medium text-slate-300">
+                    Characters to be used ({Math.min(formData.numberOfIcons, 40)} of 40)
+                  </h4>
+                  <span className="text-xs text-slate-400">
+                    Total tickets: {(formData.ticketsPerIcon || 0) * Math.min(formData.numberOfIcons, 40)}
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {RAFFLE_CHARACTERS.slice(0, Math.min(formData.numberOfIcons, 40)).map((char, index) => (
+                    <span
+                      key={char}
+                      className="px-2 py-1 bg-blue-600/20 border border-blue-500/30 rounded text-xs text-blue-300"
+                    >
+                      {char}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div className="border-t border-slate-700 pt-6">
               <h3 className="text-lg font-semibold text-white mb-4">

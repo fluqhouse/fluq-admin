@@ -98,6 +98,16 @@ export const AuthProvider = ({ children }) => {
           setError(null);
           setupTokenRefresh(existingToken);
         } else {
+          // Skip refresh attempt if on auth pages (no session expected)
+          const authPaths = ['/login', '/auth', '/', '/register'];
+          const currentPath = window.location.pathname;
+
+          if (authPaths.includes(currentPath)) {
+            console.log("📍 On auth page with no token - skipping refresh");
+            setLoading(false);
+            return;
+          }
+
           console.log("🔄 Token expired or not found, attempting refresh...");
           // Try to refresh from cookie
           const tokenData = await refreshAccessToken();

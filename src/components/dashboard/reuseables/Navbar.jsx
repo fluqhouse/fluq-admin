@@ -54,10 +54,14 @@ const Navbar = ({ user, title, onToggleSidebar, isSidebarExpanded }) => {
 
           {/* User Profile */}
           <div className="flex items-center space-x-2 lg:space-x-3">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-              <span className="text-white font-medium text-sm">
-                {user?.email ? user.email.charAt(0).toUpperCase() : 'U'}
-              </span>
+            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center overflow-hidden">
+              {user?.avatar ? (
+                <img src={user.avatar} alt="User" className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-white font-medium text-sm">
+                  {user?.email ? user.email.charAt(0).toUpperCase() : 'U'}
+                </span>
+              )}
             </div>
             <span className="text-slate-300 text-sm hidden md:block max-w-32 lg:max-w-none truncate">
               {user?.email || 'Guest'}

@@ -88,9 +88,11 @@ const Sidebar = ({ navItems, isAuthenticated, logout, isExpanded, onToggle, isDe
         {/* Header with toggle button */}
         <div className="flex items-center justify-between h-16 border-b border-slate-700/50 px-4">
           <div className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center w-full'}`}>
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-white font-bold text-lg">FH</span>
-            </div>
+            <img
+              src="/LOGO.jpg"
+              alt="Fluq House Logo"
+              className="w-10 h-10 object-contain flex-shrink-0"
+            />
             {isExpanded && (
               <div className="transition-opacity duration-200">
                 <h2 className="text-white font-bold text-lg">FLUQ HOUSE</h2>

@@ -34,11 +34,11 @@ const Home = () => {
         )}
 
         <div className="flex justify-center mb-8 pt-8">
-          <div className="w-33 h-32 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-2xl shadow-blue-500/20">
-            <div className="w-28 h-28 bg-gray-900 rounded-full flex items-center justify-center">
-              <span className="text-2xl font-bold text-white">FH</span>
-            </div>
-          </div>
+          <img
+            src="/LOGO.jpg"
+            alt="Fluq House Logo"
+            className="w-32 h-32 object-contain"
+          />
         </div>
         <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-2">
           FLUQ HOUSE

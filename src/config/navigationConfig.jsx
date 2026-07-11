@@ -28,6 +28,9 @@ import {
   TrendingUp,
   DollarSign,
   LineChart,
+  MessageCircle,
+  Inbox,
+  Headphones,
 } from "lucide-react";
 
 // Import role constants
@@ -138,6 +141,15 @@ const ClaimsManagement = React.lazy(
 const VerifyClaim = React.lazy(() => import("../pages/logistics/VerifyClaim"));
 const ClaimDetail = React.lazy(() => import("../pages/logistics/ClaimDetail"));
 
+// Support Admin Pages - Chat Support
+const SupportDashboard = React.lazy(
+  () => import("../pages/support/SupportDashboard"),
+);
+const ConversationList = React.lazy(
+  () => import("../pages/support/ConversationList"),
+);
+const ChatRoom = React.lazy(() => import("../pages/support/ChatRoom"));
+
 // ==========================================================================
 // NAVIGATION ICONS
 // ==========================================================================
@@ -187,6 +199,11 @@ export const NAVIGATION_ICONS = {
   userAnalytics: <Users className="w-5 h-5" />,
   revenueAnalytics: <DollarSign className="w-5 h-5" />,
   trendAnalysis: <LineChart className="w-5 h-5" />,
+
+  // Support / Chat
+  supportDashboard: <Headphones className="w-5 h-5" />,
+  conversations: <Inbox className="w-5 h-5" />,
+  chat: <MessageCircle className="w-5 h-5" />,
 };
 
 // ==========================================================================
@@ -413,6 +430,32 @@ export const ROLE_NAVIGATION = {
   ],
 
   // =======================================================================
+  // SUPPORT ADMIN - Customer support and chat management
+  // =======================================================================
+  supportadmin: [
+    {
+      path: "/support/dashboard",
+      text: "Dashboard",
+      icon: "supportDashboard",
+      component: SupportDashboard,
+      isDashboard: true,
+    },
+    {
+      path: "/support/conversations",
+      text: "Conversations",
+      icon: "conversations",
+      component: ConversationList,
+    },
+    {
+      path: "/support/conversations/:id",
+      text: "Chat",
+      icon: "chat",
+      component: ChatRoom,
+      hideFromSidebar: true,
+    },
+  ],
+
+  // =======================================================================
   // SUPER ADMIN - Access to all role dashboards and operations
   // =======================================================================
   superadmin: [
@@ -572,6 +615,26 @@ export const ROLE_NAVIGATION = {
       text: "Trend Analysis",
       icon: "trendAnalysis",
       component: TrendAnalysis,
+    },
+    // Support Admin routes for superadmin
+    {
+      path: "/support/dashboard",
+      text: "Support Dashboard",
+      icon: "supportDashboard",
+      component: SupportDashboard,
+    },
+    {
+      path: "/support/conversations",
+      text: "Conversations",
+      icon: "conversations",
+      component: ConversationList,
+    },
+    {
+      path: "/support/conversations/:id",
+      text: "Chat",
+      icon: "chat",
+      component: ChatRoom,
+      hideFromSidebar: true,
     },
   ],
 };

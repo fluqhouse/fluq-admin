@@ -46,9 +46,11 @@ const LoginPage = () => {
     <div className="min-h-screen bg-slate-900 flex items-center justify-center px-4">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <div className="w-16 h-16 bg-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-            <span className="text-2xl font-bold text-white">F</span>
-          </div>
+          <img
+            src="/LOGO.jpg"
+            alt="Fluq House Logo"
+            className="w-16 h-16 object-contain mx-auto mb-4"
+          />
           <h2 className="text-3xl font-light text-white mb-2">
             Login as {chosenRole}
           </h2>

@@ -9,9 +9,23 @@ import {
   DollarSign,
   Ticket,
   Trophy,
+  Users,
+  Lock,
 } from "lucide-react";
 import InputField from "../dashboard/reuseables/InputField";
 import FileUploadZone from "../dashboard/reuseables/FileUploadZone";
+
+// Available character icons (40 total)
+const RAFFLE_CHARACTERS = [
+  "BaddoKing", "SlayMama", "JapaRunner", "SapaWarrior", "OmoGhetto",
+  "WahalaBoss", "PepperDem", "ChopLife", "SharpGuy", "GbeduMaster",
+  "CruiseLord", "StreetSensei", "OmoAye", "EChoke", "ZazuChamp",
+  "HustleSpartan", "VibeMachine", "NoDeyTire", "KpakoFlex", "OnCodePlug",
+  "SkrrrBoi", "MadamNoStress", "DeyPlayChamp", "YahooPriest", "SoftLifeGen",
+  "DeyDerDey", "BetaBoi", "BigWahala", "OmoLogo", "ShishiNoDey",
+  "AbegNa", "GenzTins", "EForEnergy", "TalkuNaDo", "ESure4Me",
+  "AjebutterX", "CommotBody", "NoWahalaZone", "OGNaija", "ScatterGround",
+];
 
 export const EditItemModal = ({
   isOpen,
@@ -30,6 +44,7 @@ export const EditItemModal = ({
     // endTime: "",
     ticketsPerIcon: "",
     expectedWinners: "",
+    numberOfIcons: "40",
   });
 
   const [files, setFiles] = useState({
@@ -57,6 +72,7 @@ export const EditItemModal = ({
         ticketPrice: item.ticket_price || "",
         ticketsPerIcon: item.tickets_per_icon || "",
         expectedWinners: item.expected_winners || "",
+        numberOfIcons: item.number_of_icons || "40",
       });
 
       // Set existing media URLs as previews
@@ -328,7 +344,7 @@ export const EditItemModal = ({
 
             <InputField
               name="ticketsPerIcon"
-              label="Tickets Per Icon"
+              label="Tickets Per Character"
               type="number"
               icon={Ticket}
               placeholder="100"
@@ -338,6 +354,36 @@ export const EditItemModal = ({
               min="1"
               required
             />
+
+            {/* Number of Characters - Read Only (cannot change after creation) */}
+            <div className="bg-slate-700/30 rounded-lg p-4 border border-slate-600/50">
+              <div className="flex items-center gap-2 mb-3">
+                <Users className="w-4 h-4 text-slate-400" />
+                <h4 className="text-sm font-medium text-slate-300">
+                  Characters Used
+                </h4>
+                <Lock className="w-3 h-3 text-slate-500" />
+                <span className="text-xs text-slate-500">(Cannot be changed after creation)</span>
+              </div>
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-lg font-semibold text-white">
+                  {formData.numberOfIcons} of 40 characters
+                </span>
+                <span className="text-xs text-slate-400">
+                  Total tickets: {(formData.ticketsPerIcon || 0) * (formData.numberOfIcons || 40)}
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {RAFFLE_CHARACTERS.slice(0, Math.min(formData.numberOfIcons || 40, 40)).map((char) => (
+                  <span
+                    key={char}
+                    className="px-2 py-1 bg-blue-600/20 border border-blue-500/30 rounded text-xs text-blue-300"
+                  >
+                    {char}
+                  </span>
+                ))}
+              </div>
+            </div>
 
             <div className="border-t border-slate-700 pt-6">
               <h3 className="text-lg font-semibold text-white mb-4">
