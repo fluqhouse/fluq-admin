@@ -31,6 +31,8 @@ import {
   MessageCircle,
   Inbox,
   Headphones,
+  Activity,
+  Trophy,
 } from "lucide-react";
 
 // Import role constants
@@ -76,6 +78,16 @@ const AuditLogs = React.lazy(
 // User Management Page
 const UserManagement = React.lazy(
   () => import("../pages/generaladmin/UserManagement"),
+);
+
+// System Health Page
+const SystemHealth = React.lazy(
+  () => import("../pages/generaladmin/SystemHealth"),
+);
+
+// Leaderboard Page
+const Leaderboard = React.lazy(
+  () => import("../pages/generaladmin/Leaderboard"),
 );
 
 // Marketing Admin Pages
@@ -204,6 +216,10 @@ export const NAVIGATION_ICONS = {
   supportDashboard: <Headphones className="w-5 h-5" />,
   conversations: <Inbox className="w-5 h-5" />,
   chat: <MessageCircle className="w-5 h-5" />,
+
+  // System Health & Leaderboard
+  systemHealth: <Activity className="w-5 h-5" />,
+  leaderboard: <Trophy className="w-5 h-5" />,
 };
 
 // ==========================================================================
@@ -268,6 +284,18 @@ export const ROLE_NAVIGATION = {
       text: "Audit Logs",
       icon: "auditLogs",
       component: AuditLogs,
+    },
+    {
+      path: "/generaladmin/system-health",
+      text: "System Health",
+      icon: "systemHealth",
+      component: SystemHealth,
+    },
+    {
+      path: "/generaladmin/leaderboard",
+      text: "Leaderboard",
+      icon: "leaderboard",
+      component: Leaderboard,
     },
   ],
 
@@ -590,6 +618,18 @@ export const ROLE_NAVIGATION = {
       text: "Audit Logs",
       icon: "auditLogs",
       component: AuditLogs,
+    },
+    {
+      path: "/generaladmin/system-health",
+      text: "System Health",
+      icon: "systemHealth",
+      component: SystemHealth,
+    },
+    {
+      path: "/generaladmin/leaderboard",
+      text: "Leaderboard",
+      icon: "leaderboard",
+      component: Leaderboard,
     },
     // Marketing Analytics for superadmin
     {

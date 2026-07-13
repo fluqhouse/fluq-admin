@@ -71,9 +71,9 @@ const GeneralAdminDashboard = () => {
               <div className="bg-blue-600/20 border border-blue-500/30 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-blue-300 text-sm">Total Revenue</p>
+                    <p className="text-blue-300 text-sm">Gross Revenue</p>
                     <p className="text-white text-2xl font-bold">
-                      {formatCurrency(data?.totalRevenue || 0)}
+                      {formatCurrency(data?.overall?.summary?.gross_revenue || 0)}
                     </p>
                   </div>
                   <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
@@ -85,13 +85,13 @@ const GeneralAdminDashboard = () => {
               <div className="bg-purple-600/20 border border-purple-500/30 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-purple-300 text-sm">Active Users</p>
+                    <p className="text-purple-300 text-sm">Net Revenue</p>
                     <p className="text-white text-2xl font-bold">
-                      {formatNumber(data?.activeUsers || 0)}
+                      {formatCurrency(data?.overall?.summary?.net_revenue || 0)}
                     </p>
                   </div>
                   <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
-                    <Users className="w-6 h-6 text-white" />
+                    <TrendingUp className="w-6 h-6 text-white" />
                   </div>
                 </div>
               </div>
@@ -101,7 +101,10 @@ const GeneralAdminDashboard = () => {
                   <div>
                     <p className="text-green-300 text-sm">Lotto Revenue</p>
                     <p className="text-white text-2xl font-bold">
-                      {formatCurrency(data?.lottoRevenue || 0)}
+                      {formatCurrency(data?.lotto?.summary?.gross_revenue || 0)}
+                    </p>
+                    <p className="text-green-400 text-xs">
+                      {data?.comparison?.lotto_contribution?.percentage || 0}%
                     </p>
                   </div>
                   <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
@@ -115,7 +118,10 @@ const GeneralAdminDashboard = () => {
                   <div>
                     <p className="text-orange-300 text-sm">Raffle Revenue</p>
                     <p className="text-white text-2xl font-bold">
-                      {formatCurrency(data?.raffleRevenue || 0)}
+                      {formatCurrency(data?.raffle?.summary?.gross_revenue || 0)}
+                    </p>
+                    <p className="text-orange-400 text-xs">
+                      {data?.comparison?.raffle_contribution?.percentage || 0}%
                     </p>
                   </div>
                   <div className="w-12 h-12 bg-orange-600 rounded-lg flex items-center justify-center">
@@ -146,27 +152,27 @@ const GeneralAdminDashboard = () => {
             ) : (
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Active Games</span>
+                  <span className="text-slate-300">Total Games</span>
                   <span className="text-white font-semibold">
-                    {data?.lotto?.activeGames || 0}
+                    {data?.lotto?.summary?.total_games || 0}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Today's Sales</span>
+                  <span className="text-slate-300">Gross Revenue</span>
                   <span className="text-green-400 font-semibold">
-                    {formatCurrency(data?.lotto?.todaySales || 0)}
+                    {formatCurrency(data?.lotto?.summary?.gross_revenue || 0)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Pending Draws</span>
-                  <span className="text-yellow-400 font-semibold">
-                    {data?.lotto?.pendingDraws || 0}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Total Tickets</span>
+                  <span className="text-slate-300">Tickets Purchased</span>
                   <span className="text-blue-400 font-semibold">
-                    {formatNumber(data?.lotto?.totalTickets || 0)}
+                    {formatNumber(data?.lotto?.tickets?.total_purchased || 0)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-300">Unique Players</span>
+                  <span className="text-purple-400 font-semibold">
+                    {formatNumber(data?.lotto?.players?.unique_players || 0)}
                   </span>
                 </div>
               </div>
@@ -190,40 +196,40 @@ const GeneralAdminDashboard = () => {
             ) : (
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Active Items</span>
+                  <span className="text-slate-300">Total Items</span>
                   <span className="text-white font-semibold">
-                    {data?.raffle?.activeItems || 0}
+                    {data?.raffle?.summary?.total_items || 0}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Today's Entries</span>
+                  <span className="text-slate-300">Gross Revenue</span>
                   <span className="text-green-400 font-semibold">
-                    {formatNumber(data?.raffle?.todayEntries || 0)}
+                    {formatCurrency(data?.raffle?.summary?.gross_revenue || 0)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Upcoming Draws</span>
+                  <span className="text-slate-300">Tickets Booked</span>
                   <span className="text-blue-400 font-semibold">
-                    {data?.raffle?.upcomingDraws || 0}
+                    {formatNumber(data?.raffle?.tickets?.total_booked || 0)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Total Tickets</span>
+                  <span className="text-slate-300">Unique Players</span>
                   <span className="text-purple-400 font-semibold">
-                    {formatNumber(data?.raffle?.totalTickets || 0)}
+                    {formatNumber(data?.raffle?.players?.unique_players || 0)}
                   </span>
                 </div>
               </div>
             )}
           </div>
 
-          {/* Claims Status */}
+          {/* Transaction Summary */}
           <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-slate-700/50 p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 bg-green-600/20 rounded-lg flex items-center justify-center">
                 <ClipboardCheck className="w-5 h-5 text-green-400" />
               </div>
-              <h3 className="text-xl font-semibold text-white">Claims Status</h3>
+              <h3 className="text-xl font-semibold text-white">Transaction Summary</h3>
             </div>
             {isLoading ? (
               <div className="space-y-3">
@@ -234,27 +240,27 @@ const GeneralAdminDashboard = () => {
             ) : (
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Pending Verification</span>
-                  <span className="text-yellow-400 font-semibold">
-                    {data?.claims?.pendingVerification || 0}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Awaiting Pickup</span>
+                  <span className="text-slate-300">Game Plays</span>
                   <span className="text-blue-400 font-semibold">
-                    {data?.claims?.awaitingPickup || 0}
+                    {data?.overall?.transactions?.game_plays || 0}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Completed Today</span>
+                  <span className="text-slate-300">Game Wins</span>
                   <span className="text-green-400 font-semibold">
-                    {data?.claims?.completedToday || 0}
+                    {data?.overall?.transactions?.game_wins || 0}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Total Claimed</span>
-                  <span className="text-white font-semibold">
-                    {formatNumber(data?.claims?.totalClaimed || 0)}
+                  <span className="text-slate-300">Total Payouts</span>
+                  <span className="text-yellow-400 font-semibold">
+                    {formatCurrency(data?.overall?.summary?.total_payouts || 0)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-300">Profit Margin</span>
+                  <span className="text-purple-400 font-semibold">
+                    {data?.overall?.summary?.profit_margin || 0}%
                   </span>
                 </div>
               </div>
@@ -262,38 +268,109 @@ const GeneralAdminDashboard = () => {
           </div>
         </div>
 
-        {/* Growth Metrics */}
-        {data?.growth && (
+        {/* Game Status Breakdown */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Lotto Status */}
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-slate-700/50 p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <Gamepad2 className="w-5 h-5 text-blue-400" />
+              <h3 className="text-lg font-semibold text-white">Lotto Games by Status</h3>
+            </div>
+            {isLoading ? (
+              <div className="space-y-3">
+                {[1, 2].map((i) => (
+                  <div key={i} className="animate-pulse bg-slate-700/30 rounded h-12"></div>
+                ))}
+              </div>
+            ) : data?.lotto?.games_by_status ? (
+              <div className="space-y-2">
+                {Object.entries(data.lotto.games_by_status).map(([status, count]) => (
+                  <div
+                    key={status}
+                    className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-3 h-3 rounded-full ${
+                        status === 'open' ? 'bg-green-400' :
+                        status === 'closed' ? 'bg-slate-400' :
+                        status === 'active' ? 'bg-blue-400' :
+                        'bg-yellow-400'
+                      }`}></div>
+                      <span className="text-white font-medium capitalize">{status}</span>
+                    </div>
+                    <span className="text-slate-300 font-semibold">{count} games</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-4 text-slate-400">No game status data</div>
+            )}
+          </div>
+
+          {/* Raffle Status */}
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-slate-700/50 p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <Gift className="w-5 h-5 text-purple-400" />
+              <h3 className="text-lg font-semibold text-white">Raffle Items by Status</h3>
+            </div>
+            {isLoading ? (
+              <div className="space-y-3">
+                {[1, 2].map((i) => (
+                  <div key={i} className="animate-pulse bg-slate-700/30 rounded h-12"></div>
+                ))}
+              </div>
+            ) : data?.raffle?.items_by_status ? (
+              <div className="space-y-2">
+                {Object.entries(data.raffle.items_by_status).map(([status, count]) => (
+                  <div
+                    key={status}
+                    className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-3 h-3 rounded-full ${
+                        status === 'open' ? 'bg-green-400' :
+                        status === 'closed' ? 'bg-slate-400' :
+                        status === 'pending' ? 'bg-yellow-400' :
+                        'bg-blue-400'
+                      }`}></div>
+                      <span className="text-white font-medium capitalize">{status}</span>
+                    </div>
+                    <span className="text-slate-300 font-semibold">{count} items</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-4 text-slate-400">No item status data</div>
+            )}
+          </div>
+        </div>
+
+        {/* Revenue by Game Type */}
+        {data?.overall?.by_game_type && data.overall.by_game_type.length > 0 && (
           <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-slate-700/50 p-6">
             <div className="flex items-center gap-3 mb-4">
               <TrendingUp className="w-6 h-6 text-green-400" />
-              <h3 className="text-xl font-semibold text-white">Growth Metrics</h3>
+              <h3 className="text-xl font-semibold text-white">Revenue by Game Type</h3>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-slate-700/30 rounded-lg p-4">
-                <p className="text-slate-400 text-sm">Revenue Growth</p>
-                <p className={`text-xl font-bold ${data.growth.revenue >= 0 ? "text-green-400" : "text-red-400"}`}>
-                  {data.growth.revenue >= 0 ? "+" : ""}{data.growth.revenue?.toFixed(1)}%
-                </p>
-              </div>
-              <div className="bg-slate-700/30 rounded-lg p-4">
-                <p className="text-slate-400 text-sm">User Growth</p>
-                <p className={`text-xl font-bold ${data.growth.users >= 0 ? "text-green-400" : "text-red-400"}`}>
-                  {data.growth.users >= 0 ? "+" : ""}{data.growth.users?.toFixed(1)}%
-                </p>
-              </div>
-              <div className="bg-slate-700/30 rounded-lg p-4">
-                <p className="text-slate-400 text-sm">Lotto Growth</p>
-                <p className={`text-xl font-bold ${data.growth.lotto >= 0 ? "text-green-400" : "text-red-400"}`}>
-                  {data.growth.lotto >= 0 ? "+" : ""}{data.growth.lotto?.toFixed(1)}%
-                </p>
-              </div>
-              <div className="bg-slate-700/30 rounded-lg p-4">
-                <p className="text-slate-400 text-sm">Raffle Growth</p>
-                <p className={`text-xl font-bold ${data.growth.raffle >= 0 ? "text-green-400" : "text-red-400"}`}>
-                  {data.growth.raffle >= 0 ? "+" : ""}{data.growth.raffle?.toFixed(1)}%
-                </p>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {data.overall.by_game_type.map((item) => (
+                <div key={item.game_type} className="bg-slate-700/30 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      {item.game_type === 'lotto' ? (
+                        <Gamepad2 className="w-5 h-5 text-blue-400" />
+                      ) : (
+                        <Gift className="w-5 h-5 text-purple-400" />
+                      )}
+                      <span className="text-white font-medium capitalize">{item.game_type}</span>
+                    </div>
+                    <span className="text-slate-400 text-sm">{item.transaction_count} transactions</span>
+                  </div>
+                  <p className="text-2xl font-bold text-green-400">
+                    {formatCurrency(item.revenue)}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         )}

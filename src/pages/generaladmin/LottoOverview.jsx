@@ -80,9 +80,9 @@ const LottoOverview = () => {
               <div className="bg-blue-600/20 border border-blue-500/30 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-blue-300 text-sm">Active Games</p>
+                    <p className="text-blue-300 text-sm">Total Games</p>
                     <p className="text-white text-2xl font-bold">
-                      {data?.activeGames || 0}
+                      {data?.summary?.total_games || 0}
                     </p>
                   </div>
                   <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
@@ -94,9 +94,9 @@ const LottoOverview = () => {
               <div className="bg-green-600/20 border border-green-500/30 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-green-300 text-sm">Today's Revenue</p>
+                    <p className="text-green-300 text-sm">Tickets Purchased</p>
                     <p className="text-white text-2xl font-bold">
-                      {formatCurrency(data?.todayRevenue || 0)}
+                      {formatNumber(data?.tickets?.total_purchased || 0)}
                     </p>
                   </div>
                   <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
@@ -108,9 +108,9 @@ const LottoOverview = () => {
               <div className="bg-yellow-600/20 border border-yellow-500/30 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-yellow-300 text-sm">Pending Draws</p>
+                    <p className="text-yellow-300 text-sm">Unique Players</p>
                     <p className="text-white text-2xl font-bold">
-                      {data?.pendingDraws || 0}
+                      {formatNumber(data?.players?.unique_players || 0)}
                     </p>
                   </div>
                   <div className="w-10 h-10 bg-yellow-600 rounded-lg flex items-center justify-center">
@@ -122,9 +122,9 @@ const LottoOverview = () => {
               <div className="bg-purple-600/20 border border-purple-500/30 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-purple-300 text-sm">Total Players</p>
+                    <p className="text-purple-300 text-sm">Total Winners</p>
                     <p className="text-white text-2xl font-bold">
-                      {formatNumber(data?.totalPlayers || 0)}
+                      {formatNumber(data?.players?.total_winners || 0)}
                     </p>
                   </div>
                   <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center">
@@ -152,27 +152,27 @@ const LottoOverview = () => {
             ) : (
               <div className="space-y-3">
                 <div className="flex items-center justify-between py-2 border-b border-slate-700">
-                  <span className="text-slate-300">Total Revenue</span>
+                  <span className="text-slate-300">Gross Revenue</span>
                   <span className="text-white font-semibold">
-                    {formatCurrency(data?.totalRevenue || 0)}
+                    {formatCurrency(data?.summary?.gross_revenue || 0)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between py-2 border-b border-slate-700">
-                  <span className="text-slate-300">This Week</span>
+                  <span className="text-slate-300">Total Payouts</span>
+                  <span className="text-yellow-400 font-semibold">
+                    {formatCurrency(data?.summary?.total_payouts || 0)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between py-2 border-b border-slate-700">
+                  <span className="text-slate-300">Net Revenue</span>
                   <span className="text-green-400 font-semibold">
-                    {formatCurrency(data?.weeklyRevenue || 0)}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between py-2 border-b border-slate-700">
-                  <span className="text-slate-300">This Month</span>
-                  <span className="text-blue-400 font-semibold">
-                    {formatCurrency(data?.monthlyRevenue || 0)}
+                    {formatCurrency(data?.summary?.net_revenue || 0)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between py-2">
-                  <span className="text-slate-300">Total Payouts</span>
-                  <span className="text-yellow-400 font-semibold">
-                    {formatCurrency(data?.totalPayouts || 0)}
+                  <span className="text-slate-300">Profit Margin</span>
+                  <span className="text-blue-400 font-semibold">
+                    {data?.summary?.profit_margin || 0}%
                   </span>
                 </div>
               </div>
@@ -180,43 +180,37 @@ const LottoOverview = () => {
           </div>
 
           <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-slate-700/50 p-6">
-            <h3 className="text-lg font-semibold text-white mb-4">Recent Lotto Activity</h3>
+            <h3 className="text-lg font-semibold text-white mb-4">Games by Status</h3>
             {isLoading ? (
               <div className="space-y-3">
                 {[1, 2, 3].map((i) => (
                   <div key={i} className="animate-pulse bg-slate-700/30 rounded h-16"></div>
                 ))}
               </div>
-            ) : data?.recentActivity?.length > 0 ? (
+            ) : data?.games_by_status ? (
               <div className="space-y-3">
-                {data.recentActivity.map((activity, index) => (
+                {Object.entries(data.games_by_status).map(([status, count]) => (
                   <div
-                    key={index}
-                    className="flex items-center justify-between py-2 border-b border-slate-600 last:border-0"
+                    key={status}
+                    className="flex items-center justify-between py-3 px-4 bg-slate-700/30 rounded-lg"
                   >
-                    <div>
-                      <p className="text-white font-medium">{activity.title}</p>
-                      <p className="text-slate-400 text-sm">
-                        {activity.status} - {formatDate(activity.date)}
-                      </p>
+                    <div className="flex items-center gap-3">
+                      <div className={`w-3 h-3 rounded-full ${
+                        status === 'open' ? 'bg-green-400' :
+                        status === 'closed' ? 'bg-slate-400' :
+                        status === 'pending' ? 'bg-yellow-400' :
+                        status === 'active' ? 'bg-blue-400' :
+                        'bg-purple-400'
+                      }`}></div>
+                      <span className="text-white font-medium capitalize">{status}</span>
                     </div>
-                    <span
-                      className={`font-semibold ${
-                        activity.type === "revenue"
-                          ? "text-green-400"
-                          : activity.type === "payout"
-                          ? "text-yellow-400"
-                          : "text-blue-400"
-                      }`}
-                    >
-                      {formatCurrency(activity.amount)}
-                    </span>
+                    <span className="text-slate-300 font-semibold">{count} games</span>
                   </div>
                 ))}
               </div>
             ) : (
               <div className="text-center py-8 text-slate-400">
-                No recent activity
+                No status data available
               </div>
             )}
           </div>

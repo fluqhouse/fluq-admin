@@ -80,9 +80,9 @@ const RaffleOverview = () => {
               <div className="bg-purple-600/20 border border-purple-500/30 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-purple-300 text-sm">Active Raffles</p>
+                    <p className="text-purple-300 text-sm">Total Items</p>
                     <p className="text-white text-2xl font-bold">
-                      {data?.activeRaffles || 0}
+                      {data?.summary?.total_items || 0}
                     </p>
                   </div>
                   <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center">
@@ -94,9 +94,9 @@ const RaffleOverview = () => {
               <div className="bg-green-600/20 border border-green-500/30 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-green-300 text-sm">Today's Entries</p>
+                    <p className="text-green-300 text-sm">Tickets Booked</p>
                     <p className="text-white text-2xl font-bold">
-                      {formatNumber(data?.todayEntries || 0)}
+                      {formatNumber(data?.tickets?.total_booked || 0)}
                     </p>
                   </div>
                   <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
@@ -108,9 +108,9 @@ const RaffleOverview = () => {
               <div className="bg-blue-600/20 border border-blue-500/30 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-blue-300 text-sm">Upcoming Draws</p>
+                    <p className="text-blue-300 text-sm">Unique Players</p>
                     <p className="text-white text-2xl font-bold">
-                      {data?.upcomingDraws || 0}
+                      {data?.players?.unique_players || 0}
                     </p>
                   </div>
                   <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
@@ -122,9 +122,9 @@ const RaffleOverview = () => {
               <div className="bg-orange-600/20 border border-orange-500/30 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-orange-300 text-sm">Total Prize Value</p>
+                    <p className="text-orange-300 text-sm">Total Winners</p>
                     <p className="text-white text-2xl font-bold">
-                      {formatCurrency(data?.totalPrizeValue || 0)}
+                      {formatNumber(data?.tickets?.total_winners || 0)}
                     </p>
                   </div>
                   <div className="w-10 h-10 bg-orange-600 rounded-lg flex items-center justify-center">
@@ -152,27 +152,27 @@ const RaffleOverview = () => {
             ) : (
               <div className="space-y-3">
                 <div className="flex items-center justify-between py-2 border-b border-slate-700">
-                  <span className="text-slate-300">Total Revenue</span>
+                  <span className="text-slate-300">Gross Revenue</span>
                   <span className="text-white font-semibold">
-                    {formatCurrency(data?.totalRevenue || 0)}
+                    {formatCurrency(data?.summary?.gross_revenue || 0)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between py-2 border-b border-slate-700">
-                  <span className="text-slate-300">This Week</span>
+                  <span className="text-slate-300">Total Payouts</span>
+                  <span className="text-yellow-400 font-semibold">
+                    {formatCurrency(data?.summary?.total_payouts || 0)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between py-2 border-b border-slate-700">
+                  <span className="text-slate-300">Net Revenue</span>
                   <span className="text-green-400 font-semibold">
-                    {formatCurrency(data?.weeklyRevenue || 0)}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between py-2 border-b border-slate-700">
-                  <span className="text-slate-300">This Month</span>
-                  <span className="text-blue-400 font-semibold">
-                    {formatCurrency(data?.monthlyRevenue || 0)}
+                    {formatCurrency(data?.summary?.net_revenue || 0)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between py-2">
-                  <span className="text-slate-300">Total Tickets Sold</span>
+                  <span className="text-slate-300">Profit Margin</span>
                   <span className="text-purple-400 font-semibold">
-                    {formatNumber(data?.totalTicketsSold || 0)}
+                    {data?.summary?.profit_margin || 0}%
                   </span>
                 </div>
               </div>
@@ -180,40 +180,36 @@ const RaffleOverview = () => {
           </div>
 
           <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-slate-700/50 p-6">
-            <h3 className="text-lg font-semibold text-white mb-4">Active Raffle Events</h3>
+            <h3 className="text-lg font-semibold text-white mb-4">Items by Status</h3>
             {isLoading ? (
               <div className="space-y-3">
                 {[1, 2, 3].map((i) => (
                   <div key={i} className="animate-pulse bg-slate-700/30 rounded h-16"></div>
                 ))}
               </div>
-            ) : data?.activeItems?.length > 0 ? (
+            ) : data?.items_by_status ? (
               <div className="space-y-3">
-                {data.activeItems.map((item, index) => (
+                {Object.entries(data.items_by_status).map(([status, count]) => (
                   <div
-                    key={index}
-                    className="flex items-center justify-between py-2 border-b border-slate-600 last:border-0"
+                    key={status}
+                    className="flex items-center justify-between py-3 px-4 bg-slate-700/30 rounded-lg"
                   >
-                    <div>
-                      <p className="text-white font-medium">{item.title}</p>
-                      <p className="text-slate-400 text-sm">
-                        {item.description} - Ends {formatDate(item.endDate)}
-                      </p>
+                    <div className="flex items-center gap-3">
+                      <div className={`w-3 h-3 rounded-full ${
+                        status === 'open' ? 'bg-green-400' :
+                        status === 'closed' ? 'bg-slate-400' :
+                        status === 'pending' ? 'bg-yellow-400' :
+                        'bg-blue-400'
+                      }`}></div>
+                      <span className="text-white font-medium capitalize">{status}</span>
                     </div>
-                    <div className="text-right">
-                      <p className="text-green-400 font-semibold">
-                        {formatNumber(item.entries)} entries
-                      </p>
-                      <p className="text-slate-400 text-sm">
-                        {formatCurrency(item.prizeValue)} value
-                      </p>
-                    </div>
+                    <span className="text-slate-300 font-semibold">{count} items</span>
                   </div>
                 ))}
               </div>
             ) : (
               <div className="text-center py-8 text-slate-400">
-                No active raffle events
+                No status data available
               </div>
             )}
           </div>
