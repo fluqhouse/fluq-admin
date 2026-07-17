@@ -13,6 +13,7 @@ import {
   useConversations,
   useConversationMessages,
   useMarkAsRead,
+  useSendMessage,
   addMessageToCache,
   QUERY_KEYS,
 } from "./queries/useChatQueries";
@@ -65,6 +66,7 @@ const useChat = (activeConversationId = null, activeUserId = null) => {
 
   // Mutations
   const markAsReadMutation = useMarkAsRead();
+  const sendMessageMutation = useSendMessage();
 
   // Join admin global room for alerts
   useEffect(() => {
@@ -190,22 +192,45 @@ const useChat = (activeConversationId = null, activeUserId = null) => {
     }
   }, [messagesData]);
 
-  // Send a message
+  // Send a message (with REST fallback)
   const sendMessage = useCallback(
-    (content) => {
-      if (!isConnected || !activeUserId || !content.trim()) {
+    async (content) => {
+      if (!activeUserId || !activeConversationId || !content.trim()) {
         return false;
       }
 
-      emit("send_message", {
-        conversationUserId: activeUserId,
-        content: content.trim(),
-      });
+      const trimmedContent = content.trim();
 
-      return true;
+      // Try WebSocket first if connected
+      if (isConnected) {
+        try {
+          emit("send_message", {
+            conversationUserId: activeUserId,
+            content: trimmedContent,
+          });
+          return true;
+        } catch (wsError) {
+          console.warn("[Chat] WebSocket send failed, falling back to REST:", wsError);
+        }
+      }
+
+      // Fall back to REST API
+      try {
+        await sendMessageMutation.mutateAsync({
+          conversationId: activeConversationId,
+          content: trimmedContent,
+        });
+        return true;
+      } catch (restError) {
+        console.error("[Chat] REST send failed:", restError);
+        return false;
+      }
     },
-    [isConnected, activeUserId, emit]
+    [isConnected, activeUserId, activeConversationId, emit, sendMessageMutation]
   );
+
+  // Expose mutation state for UI feedback
+  const isSendingMessage = sendMessageMutation.isPending;
 
   // Mark conversation as read
   const markAsRead = useCallback(
@@ -254,6 +279,7 @@ const useChat = (activeConversationId = null, activeUserId = null) => {
     // Messages
     messages,
     isLoadingMessages,
+    isSendingMessage,
     loadMoreMessages,
     hasMoreMessages: hasNextPage,
     isLoadingMoreMessages: isFetchingNextPage,

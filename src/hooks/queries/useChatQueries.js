@@ -149,6 +149,36 @@ export const useMarkAsRead = () => {
 };
 
 /**
+ * Hook to send a message via REST API
+ * @param {Object} options - Mutation options
+ */
+export const useSendMessage = (options = {}) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ conversationId, content }) =>
+      chatAPI.sendMessage(conversationId, content),
+    onSuccess: (data, variables) => {
+      // Add the new message to the cache
+      const message = data.data?.message;
+      if (message) {
+        addMessageToCache(queryClient, variables.conversationId, message);
+      }
+      // Invalidate conversations to update last_message_preview
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.CHAT, QUERY_KEYS.CONVERSATIONS],
+      });
+    },
+    onError: (error) => {
+      const message =
+        error.response?.data?.error?.message || "Failed to send message";
+      toast.error(message);
+    },
+    ...options,
+  });
+};
+
+/**
  * Helper to invalidate all chat queries
  * @param {QueryClient} queryClient - React Query client
  */

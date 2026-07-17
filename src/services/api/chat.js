@@ -90,4 +90,18 @@ export const chatAPI = {
     );
     return response.data;
   },
+
+  /**
+   * Send a message to a conversation (REST API)
+   * @param {number|string} conversationId - Conversation ID
+   * @param {string} content - Message content
+   * @returns {Promise<Object>} Created message
+   */
+  sendMessage: async (conversationId, content) => {
+    const response = await api.post(
+      `/api/chat/admin/conversations/${conversationId}/message`,
+      { content }
+    );
+    return response.data;
+  },
 };

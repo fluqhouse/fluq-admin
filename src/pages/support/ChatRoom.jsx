@@ -47,6 +47,7 @@ const ChatRoom = () => {
     joinConversation,
     markAsRead,
     isConnected,
+    isSendingMessage,
   } = useChat(conversationId, userId);
 
   // Mutations
@@ -169,7 +170,7 @@ const ChatRoom = () => {
           <div className="px-4 py-2 bg-yellow-500/10 border-t border-yellow-500/20 flex items-center gap-2 text-sm text-yellow-400">
             <AlertCircle className="w-4 h-4" />
             <span>
-              Connecting to chat server... Messages may be delayed.
+              Connecting to chat server... You can still send messages.
             </span>
           </div>
         )}
@@ -177,10 +178,12 @@ const ChatRoom = () => {
         {/* Chat Input */}
         <ChatInput
           onSend={handleSendMessage}
-          disabled={!isConnected || status === "closed"}
+          disabled={status === "closed" || isSendingMessage}
           placeholder={
             status === "closed"
               ? "Conversation is closed. Reopen to send messages."
+              : isSendingMessage
+              ? "Sending..."
               : "Type a message..."
           }
         />
