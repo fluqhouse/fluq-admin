@@ -44,7 +44,6 @@ const ChatRoom = () => {
   const {
     messages: realtimeMessages,
     sendMessage,
-    joinConversation,
     markAsRead,
     isConnected,
     isSendingMessage,
@@ -54,13 +53,14 @@ const ChatRoom = () => {
   const closeConversation = useCloseConversation();
   const reopenConversation = useReopenConversation();
 
-  // Join conversation room when userId is available
+  // Mark conversation as read when entering (useChat handles room joining)
   useEffect(() => {
-    if (userId && isConnected) {
-      joinConversation(userId);
+    if (userId && isConnected && conversationId) {
       markAsRead(conversationId);
     }
-  }, [userId, isConnected, conversationId, joinConversation, markAsRead]);
+    // Only run when conversationId or connection state changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [conversationId, isConnected, userId]);
 
   // Combine API messages with real-time messages (avoid duplicates)
   const allMessages = useCallback(() => {

@@ -38,6 +38,7 @@ const useChat = (activeConversationId = null, activeUserId = null) => {
   // Refs
   const currentRoomRef = useRef(null);
   const typingTimeoutRef = useRef(null);
+  const markedAsReadRef = useRef(new Set()); // Track which conversations have been marked as read
 
   // WebSocket connection
   const {
@@ -80,10 +81,8 @@ const useChat = (activeConversationId = null, activeUserId = null) => {
     (userId) => {
       if (!isConnected || !userId) return;
 
-      // Leave previous room
-      if (currentRoomRef.current && currentRoomRef.current !== userId) {
-        // Socket.io handles room leaving automatically when joining new room
-      }
+      // Skip if already in this room
+      if (currentRoomRef.current === userId) return;
 
       emit("join_room", { conversationUserId: userId });
       currentRoomRef.current = userId;
@@ -235,16 +234,20 @@ const useChat = (activeConversationId = null, activeUserId = null) => {
   // Mark conversation as read
   const markAsRead = useCallback(
     (conversationId) => {
-      if (conversationId) {
-        markAsReadMutation.mutate(conversationId);
+      if (!conversationId) return;
 
-        // Clear unread count locally
-        setUnreadCounts((prev) => {
-          const newCounts = { ...prev };
-          delete newCounts[conversationId];
-          return newCounts;
-        });
-      }
+      // Skip if already marked as read in this session
+      if (markedAsReadRef.current.has(conversationId)) return;
+
+      markedAsReadRef.current.add(conversationId);
+      markAsReadMutation.mutate(conversationId);
+
+      // Clear unread count locally
+      setUnreadCounts((prev) => {
+        const newCounts = { ...prev };
+        delete newCounts[conversationId];
+        return newCounts;
+      });
     },
     [markAsReadMutation]
   );
